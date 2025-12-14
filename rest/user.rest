@@ -1,11 +1,11 @@
 ###
 GET http://localhost:3000/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImpvaG5kb2UiLCJpYXQiOjE3NjU2MDAwOTUsImV4cCI6MTc2NTY4NjQ5NX0.ikR11JQFBRQrfmxg7xbamqBtCZBudRyXkhuTjlfqDR0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlmMjEyZmQ2LTU2ZWQtNDg1NS1iOTUzLWIxYjhkNDE5YmIzOSIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY1NzUzMjA0LCJleHAiOjE3NjU4Mzk2MDR9.QS5hb1n2yGK-lBByjpnhHwVlam3XkhW-eykhB0u8gO4
 
 ###
 GET http://localhost:3000/users/6fd4e9c8-7295-43e5-b100-b66570e00484
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImpvaG5kb2UiLCJpYXQiOjE3NjU2MDAwOTUsImV4cCI6MTc2NTY4NjQ5NX0.ikR11JQFBRQrfmxg7xbamqBtCZBudRyXkhuTjlfqDR0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlmMjEyZmQ2LTU2ZWQtNDg1NS1iOTUzLWIxYjhkNDE5YmIzOSIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY1NzUzMjA0LCJleHAiOjE3NjU4Mzk2MDR9.QS5hb1n2yGK-lBByjpnhHwVlam3XkhW-eykhB0u8gO4
 
 ###
 POST http://localhost:3000/users
@@ -14,7 +14,7 @@ Content-Type: application/json
 {
   "name": "John Doe",
   "password": "securepassword",
-  "email": "john.doe+1@example.com",
+  "email": "john.doe+2@example.com",
   "userName": "johndoe1"
 }
 
@@ -23,7 +23,7 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "password": "newsecurepassword",
+  "password": "securepassword",
   "userName": "john.doe+1@example.com"
 }
 
