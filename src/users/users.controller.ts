@@ -18,7 +18,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  public getAllUsers(): UserResponseDto[] {
+  public getAllUsers() {
     return this.usersService.getAllUsers();
   }
   @UseGuards(AuthGuard('jwt'))

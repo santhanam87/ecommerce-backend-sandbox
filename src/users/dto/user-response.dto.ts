@@ -1,7 +1,7 @@
 import { User } from '../entity/user.entity';
 
 export class UserResponseDto {
-  userName: string;
+  userName: string | null;
   email: string;
   name: string;
   createdAt: Date;

@@ -4,17 +4,19 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/udpate-user.dto';
 import { UserResponseDto } from './dto/user-response.dto';
 import { PasswordUtil } from 'src/common/utils/password.util';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
   private users: User[] = [];
+  constructor(private readonly prisma: PrismaService) {}
 
-  public createUser({
+  public async createUser({
     userName,
     email,
     password,
     name,
-  }: CreateUserDto): UserResponseDto {
+  }: CreateUserDto): Promise<UserResponseDto> {
     const user = new User();
     user.id = (this.users.length + 1).toString();
     user.createdAt = new Date();
@@ -22,14 +24,15 @@ export class UsersService {
     user.userName = userName;
     user.email = email;
     user.password = PasswordUtil.hashPassword(password);
-    this.users.push(user);
-    return new UserResponseDto(user);
+    const insertedUser = await this.prisma.user.create({
+      data: user,
+    });
+    return new UserResponseDto(insertedUser);
   }
 
-  public getAllUsers(): UserResponseDto[] {
-    return this.users.map(
-      (user: User) => new UserResponseDto(user),
-    ) as UserResponseDto[];
+  public async getAllUsers() {
+    const users = await this.prisma.user.findMany();
+    return users.map((user: User) => new UserResponseDto(user));
   }
 
   public getUserById(userName: string): User | null {
