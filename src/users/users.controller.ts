@@ -22,9 +22,9 @@ export class UsersController {
     return this.usersService.getAllUsers();
   }
   @UseGuards(AuthGuard('jwt'))
-  @Get(':userName')
-  public getUserById(@Param('userName') id: string) {
-    const user = this.usersService.getUserById(id);
+  @Get(':id')
+  public async getUserById(@Param('id') id: string) {
+    const user = await this.usersService.getUserById(id);
     if (user) {
       return new UserResponseDto(user);
     }

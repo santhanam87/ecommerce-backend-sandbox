@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PasswordUtil } from 'src/common/utils/password.util';
-import { UserResponseDto } from 'src/users/dto/user-response.dto';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -14,18 +14,22 @@ export class AuthService {
     this.jwtService = jwtService;
     this.usersService = usersService;
   }
-  public validateUser(userName: string, pasword: string): any {
-    const user = this.usersService.getUserById(userName);
+  public async validateUser(
+    email: string,
+    pasword: string,
+  ): Promise<User | null> {
+    const user = await this.usersService.getUserByEmail(email);
     if (user && PasswordUtil.comparePasswords(pasword, user.password)) {
-      return new UserResponseDto(user);
+      return user;
     }
     return null;
   }
-  public login(user: LoginDto) {
-    if (!this.validateUser(user.userName, user.password)) {
+  public async login({ userName, password }: LoginDto) {
+    const user = await this.validateUser(userName, password);
+    if (!user) {
       return { message: 'Invalid credentials' };
     }
-    const payload = { userName: user.userName };
+    const payload = { id: user.id, sub: user.userName };
     return {
       access_token: this.jwtService.sign(payload),
     };
