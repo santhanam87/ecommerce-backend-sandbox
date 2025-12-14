@@ -4,56 +4,77 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/udpate-user.dto';
 import { UserResponseDto } from './dto/user-response.dto';
 import { PasswordUtil } from 'src/common/utils/password.util';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
   private users: User[] = [];
+  constructor(private readonly prisma: PrismaService) {}
 
-  public createUser({
+  public async createUser({
     userName,
     email,
     password,
     name,
-  }: CreateUserDto): UserResponseDto {
+  }: CreateUserDto): Promise<UserResponseDto> {
     const user = new User();
-    user.id = (this.users.length + 1).toString();
     user.createdAt = new Date();
     user.name = name;
     user.userName = userName;
     user.email = email;
     user.password = PasswordUtil.hashPassword(password);
-    this.users.push(user);
-    return new UserResponseDto(user);
-  }
-
-  public getAllUsers(): UserResponseDto[] {
-    return this.users.map((user) => new UserResponseDto(user));
-  }
-
-  public getUserById(userName: string): User | undefined {
-    return this.users.find((user) => {
-      return user.userName === userName;
+    const insertedUser = await this.prisma.user.create({
+      data: user,
     });
+    return new UserResponseDto(insertedUser);
   }
 
-  public deleteUserById(userName: string): boolean {
-    const initialLength = this.users.length;
-    this.users = this.users.filter((user) => user.userName !== userName);
-    return this.users.length < initialLength;
+  public async getAllUsers() {
+    const users = await this.prisma.user.findMany();
+    return users.map((user: User) => new UserResponseDto(user));
   }
 
-  public updateUser(
-    userName: string,
+  public async getUserByEmail(email: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+    return user;
+  }
+
+  public async getUserById(id: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+    return user;
+  }
+
+  public async deleteUserById(id: string): Promise<boolean> {
+    const deletedUser = await this.prisma.user.delete({
+      where: { id },
+    });
+    return deletedUser !== null;
+  }
+
+  public async updateUser(
+    id: string,
     updatedData: UpdateUserDto,
-  ): UserResponseDto | undefined {
-    const user = this.users.find((user) => user.userName === userName);
-    if (user) {
-      if (updatedData.password) {
-        updatedData.password = PasswordUtil.hashPassword(updatedData.password);
-      }
-      Object.assign(user, updatedData);
-      return new UserResponseDto(user);
+  ): Promise<UserResponseDto | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+    if (!user) {
+      return null;
     }
-    return undefined;
+    if (updatedData.password) {
+      updatedData.password = PasswordUtil.hashPassword(updatedData.password);
+    }
+    const updatedUser = await this.prisma.user.update({
+      where: { id },
+      data: updatedData,
+    });
+    if (updatedUser) {
+      return new UserResponseDto(updatedUser);
+    }
+    return null;
   }
 }
