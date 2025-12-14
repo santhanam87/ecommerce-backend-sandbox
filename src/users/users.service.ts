@@ -5,11 +5,15 @@ import { UpdateUserDto } from './dto/udpate-user.dto';
 import { UserResponseDto } from './dto/user-response.dto';
 import { PasswordUtil } from 'src/common/utils/password.util';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UsersService {
   private users: User[] = [];
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private eventEmitter: EventEmitter2,
+  ) {}
 
   public async createUser({
     userName,
@@ -25,6 +29,11 @@ export class UsersService {
     user.password = PasswordUtil.hashPassword(password);
     const insertedUser = await this.prisma.user.create({
       data: user,
+    });
+    this.eventEmitter.emit('user.created', {
+      userId: insertedUser.id,
+      email: insertedUser.email,
+      userName: insertedUser.userName,
     });
     return new UserResponseDto(insertedUser);
   }
