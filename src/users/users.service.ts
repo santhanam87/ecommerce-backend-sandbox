@@ -27,13 +27,17 @@ export class UsersService {
   }
 
   public getAllUsers(): UserResponseDto[] {
-    return this.users.map((user) => new UserResponseDto(user));
+    return this.users.map(
+      (user: User) => new UserResponseDto(user),
+    ) as UserResponseDto[];
   }
 
-  public getUserById(userName: string): User | undefined {
-    return this.users.find((user) => {
-      return user.userName === userName;
-    });
+  public getUserById(userName: string): User | null {
+    return (
+      (this.users.find((user: User) => {
+        return user.userName === userName;
+      }) as User) || null
+    );
   }
 
   public deleteUserById(userName: string): boolean {
