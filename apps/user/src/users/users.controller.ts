@@ -22,9 +22,9 @@ export class UsersController {
     return this.usersService.getAllUsers();
   }
   @UseGuards(AuthGuard('jwt'))
-  @Get(':id')
-  public async getUserById(@Param('id') id: string) {
-    const user = await this.usersService.getUserById(id);
+  @Get(':userName')
+  public async getUserById(@Param('userName') userName: string) {
+    const user = await this.usersService.getUserByName(userName);
     if (user) {
       return new UserResponseDto(user);
     }
@@ -43,8 +43,8 @@ export class UsersController {
     return this.usersService.updateUser(userName, body);
   }
   @UseGuards(AuthGuard('jwt'))
-  @Delete(':id')
-  public deleteUserById(@Param('id') id: string) {
-    return this.usersService.deleteUserById(id);
+  @Delete(':userName')
+  public deleteUserById(@Param('userName') userName: string) {
+    return this.usersService.deleteUserById(userName);
   }
 }

@@ -1,12 +1,11 @@
-import { User } from '../entity/user.entity';
+import { User } from '@prisma/client';
 
 export class UserResponseDto {
-  userName: string | null;
-  id: string;
+  userName: string;
   email: string;
   name: string;
   createdAt: Date;
-  constructor({ userName, email, name, createdAt, id }: User) {
-    Object.assign(this, { userName, email, name, createdAt, id });
+  constructor({ userName, email, name, createdAt }: User) {
+    Object.assign(this, { userName, email, name, createdAt });
   }
 }
