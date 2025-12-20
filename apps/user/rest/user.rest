@@ -1,5 +1,5 @@
 ###
-POST http://localhost:3001/users
+POST http://localhost:3000/users
 Content-Type: application/json
 
 {
@@ -10,17 +10,17 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3001/auth/login
+POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "password": "newsecurepassword",
-  "userName": "johndoe"
+  "password": "securepassword",
+  "userName": "johndoe1"
 }
 
 ###
-GET http://localhost:3001/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyZWYwMmNlLTIwZjctNDAxZS04ZGMxLWMwNjYyMWQ5MWExZCIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY1OTQ2ODgxLCJleHAiOjE3NjYwMzMyODF9.4iuMSvOs3tg5wUInSBQo9hDXvvS9DMeZAlF94A-1AsY
+GET http://localhost:3000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlZDE0MDUxLTBjY2EtNDc1MC1iOWVkLTk0Zjg2ODMwODQzZiIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY2MjA1MTg4LCJleHAiOjE3NjYyOTE1ODh9.2mHNL_3vFNA6f00EHI3BfKN9aCibGE31D-Kh-qMLsDE
 
 ###
 GET http://localhost:3001/users/johndoe
