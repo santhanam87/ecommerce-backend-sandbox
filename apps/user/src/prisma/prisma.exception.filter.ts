@@ -11,10 +11,5 @@ export class PrismaExceptionFilter implements ExceptionFilter {
         details: exception.meta,
       });
     }
-    console.info(exception);
-    response.status(500).json({
-      statusCode: 500,
-      message: 'Internal server error',
-    });
   }
 }

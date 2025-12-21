@@ -5,8 +5,8 @@ Content-Type: application/json
 {
   "name": "John Doe",
   "password": "securepassword",
-  "email": "john.doe+1@example.com",
-  "userName": "johndoe1"
+  "email": "john.doe+2@example.com",
+  "userName": "johndoe2"
 }
 
 ###
@@ -20,15 +20,15 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlZDE0MDUxLTBjY2EtNDc1MC1iOWVkLTk0Zjg2ODMwODQzZiIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY2MjA1MTg4LCJleHAiOjE3NjYyOTE1ODh9.2mHNL_3vFNA6f00EHI3BfKN9aCibGE31D-Kh-qMLsDE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlZDE0MDUxLTBjY2EtNDc1MC1iOWVkLTk0Zjg2ODMwODQzZiIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY2MzU4OTE5LCJleHAiOjE3NjY0NDUzMTl9.Ia4dqixXX6IKsBlyILzrsV89rIwDigclShdW2q_3gDk
 
 ###
-GET http://localhost:3001/users/johndoe
+GET http://localhost:3000/users/johndoe2
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyZWYwMmNlLTIwZjctNDAxZS04ZGMxLWMwNjYyMWQ5MWExZCIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY1OTQ2ODgxLCJleHAiOjE3NjYwMzMyODF9.4iuMSvOs3tg5wUInSBQo9hDXvvS9DMeZAlF94A-1AsY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlZDE0MDUxLTBjY2EtNDc1MC1iOWVkLTk0Zjg2ODMwODQzZiIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY2Mjg4MzI1LCJleHAiOjE3NjYzNzQ3MjV9.zigrdcYtYp_--5Qj66cMinRVCqKcJ3Q92bH3RVTQ44g
 
 ###
-PATCH http://localhost:3001/users/johndoe
+PATCH http://localhost:3000/users/johndoe
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyZWYwMmNlLTIwZjctNDAxZS04ZGMxLWMwNjYyMWQ5MWExZCIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY1OTQ2ODgxLCJleHAiOjE3NjYwMzMyODF9.4iuMSvOs3tg5wUInSBQo9hDXvvS9DMeZAlF94A-1AsY
 
