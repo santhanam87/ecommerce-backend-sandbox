@@ -1,0 +1,3 @@
+###
+GET http://localhost:3001/products
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlZDE0MDUxLTBjY2EtNDc1MC1iOWVkLTk0Zjg2ODMwODQzZiIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY2MzU4OTE5LCJleHAiOjE3NjY0NDUzMTl9.Ia4dqixXX6IKsBlyILzrsV89rIwDigclShdW2q_3gDk

@@ -3,7 +3,6 @@ import { PrismaClient } from '../../generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
 @Injectable()
-//implements OnModuleInit, OnModuleDestroy
 export class PrismaService extends PrismaClient {
   constructor() {
     // Load the connection string from environment variables
@@ -14,12 +13,4 @@ export class PrismaService extends PrismaClient {
     // Pass the adapter to the PrismaClient constructor
     super({ adapter });
   }
-
-  // async onModuleInit() {
-  //   await this.$connect();
-  // }
-
-  // async onModuleDestroy() {
-  //   await this.$disconnect();
-  // }
 }
