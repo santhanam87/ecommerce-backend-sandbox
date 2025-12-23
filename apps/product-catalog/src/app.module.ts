@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_FILTER } from '@nestjs/core';
 import { PrismaExceptionFilter } from './prisma/prisma.exception.filter';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
+import { CategoryModule } from './category/category.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -16,6 +17,7 @@ import { HttpExceptionFilter } from './common/filter/http-exception.filter';
     PrismaModule,
     AuthModule,
     ProductsModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [
