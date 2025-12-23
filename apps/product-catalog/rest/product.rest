@@ -1,3 +1,32 @@
 ###
 GET http://localhost:3001/products
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlZDE0MDUxLTBjY2EtNDc1MC1iOWVkLTk0Zjg2ODMwODQzZiIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY2MzU4OTE5LCJleHAiOjE3NjY0NDUzMTl9.Ia4dqixXX6IKsBlyILzrsV89rIwDigclShdW2q_3gDk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlZDE0MDUxLTBjY2EtNDc1MC1iOWVkLTk0Zjg2ODMwODQzZiIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY2NDY1MzAyLCJleHAiOjE3NjY1NTE3MDJ9.nd35GqChBVUOcTAKRYKc0wCf8tfd_cOJLROY30AAmNU
+
+###
+POST http://localhost:3001/products
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlZDE0MDUxLTBjY2EtNDc1MC1iOWVkLTk0Zjg2ODMwODQzZiIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY2NDY1MzAyLCJleHAiOjE3NjY1NTE3MDJ9.nd35GqChBVUOcTAKRYKc0wCf8tfd_cOJLROY30AAmNU
+
+{
+  "name": "Smartphone",
+  "description": "A high-end smartphone with a great camera",
+  "price": 999.99,
+  "categoryId": "351ec415-cbbe-4ee7-a4b8-4a5d441ecd5a"
+}
+
+###
+GET http://localhost:3001/category
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlZDE0MDUxLTBjY2EtNDc1MC1iOWVkLTk0Zjg2ODMwODQzZiIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY2NDY0Mzc1LCJleHAiOjE3NjY1NTA3NzV9.4mBh1lkRS7Ma6Rfp3vUfQTOEvXWuQmQ8-lOOe1hZ7Hw
+
+###
+POST http://localhost:3001/category
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlZDE0MDUxLTBjY2EtNDc1MC1iOWVkLTk0Zjg2ODMwODQzZiIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY2NDY0Mzc1LCJleHAiOjE3NjY1NTA3NzV9.4mBh1lkRS7Ma6Rfp3vUfQTOEvXWuQmQ8-lOOe1hZ7Hw
+
+{
+  "name": "Electronics"
+}
+
+###
+GET http://localhost:3001/category/Electronics
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlZDE0MDUxLTBjY2EtNDc1MC1iOWVkLTk0Zjg2ODMwODQzZiIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY2NDY0Mzc1LCJleHAiOjE3NjY1NTA3NzV9.4mBh1lkRS7Ma6Rfp3vUfQTOEvXWuQmQ8-lOOe1hZ7Hw

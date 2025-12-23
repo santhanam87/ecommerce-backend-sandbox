@@ -25,8 +25,9 @@ export class AppController {
       'Content-Type': 'application/json',
     };
     try {
-      const productResponse = this.httpService.get(url, { headers });
-      const productsReponse = await lastValueFrom(productResponse);
+      const productsReponse = await lastValueFrom(
+        this.httpService.get(url, { headers }),
+      );
       return productsReponse.data;
     } catch (error) {
       throw new HttpException(
