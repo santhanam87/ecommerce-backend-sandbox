@@ -7,9 +7,15 @@ import { PrismaModule } from './prisma/prisma.module';
 import { APP_FILTER } from '@nestjs/core';
 import { PrismaExceptionFilter } from './prisma/prisma.exception.filter';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
+import { InventoryModule } from './inventory/inventory.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), PrismaModule, AuthModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule,
+    AuthModule,
+    InventoryModule,
+  ],
   controllers: [AppController],
   providers: [
     {

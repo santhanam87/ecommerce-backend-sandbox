@@ -14,7 +14,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model Inventroy {
+model Inventory {
   id            String    @id @default(uuid())
   productId     String    @unique
   availableQty  Int
