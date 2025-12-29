@@ -9,8 +9,15 @@ import { APP_FILTER } from '@nestjs/core';
 import { PrismaExceptionFilter } from './prisma/prisma.exception.filter';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
 import { CategoryModule } from './category/category.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 @Module({
   imports: [
+    ClientsModule.register([
+      {
+        name: 'MATH_SERVICE',
+        transport: Transport.TCP,
+      },
+    ]),
     ConfigModule.forRoot({
       isGlobal: true,
     }),

@@ -5,21 +5,25 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
 import { PrismaExceptionFilter } from './prisma/prisma.exception.filter';
-import { HttpModule } from '@nestjs/axios';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
+    ClientsModule.register([
+      {
+        name: 'MATH_SERVICE',
+        transport: Transport.TCP,
+        // options: {
+        //   host: '127.0.0.1',
+        //   port: Number(process.env.PORT),
+        // },
+      },
+    ]),
     ConfigModule.forRoot({
       isGlobal: true,
-    }),
-    EventEmitterModule.forRoot(),
-    HttpModule.register({
-      timeout: 5000,
-      maxRedirects: 5,
     }),
     PrismaModule,
     UsersModule,
