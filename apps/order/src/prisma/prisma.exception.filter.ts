@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 export class PrismaExceptionFilter implements ExceptionFilter {
   catch(exception: Prisma.PrismaClientKnownRequestError, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse();
+    console.info(exception);
     if (exception.code === 'P2002') {
       response.status(409).json({
         statusCode: 409,

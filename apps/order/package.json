@@ -20,7 +20,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "schema:generate": "prisma generate",
     "schema:migrate": "prisma migrate dev",
-    "schema:reset": " prisma migrate reset"
+    "schema:reset": "prisma migrate reset",
+    "schema:format": "prisma format"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -45,6 +46,8 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.7",
     "@types/supertest": "^6.0.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.3",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",

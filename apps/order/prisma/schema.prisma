@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
   moduleFormat = "cjs"
 }
 
@@ -15,9 +15,19 @@ datasource db {
 }
 
 model Order {
-  id          String   @id @default(uuid())
+  id          String      @id @default(uuid())
   userId      String
   status      String
   totalAmount Float
-  createdAt   DateTime @default(now())
+  createdAt   DateTime    @default(now())
+  orderItems  OrderItem[]
+}
+
+model OrderItem {
+  id            String @id @default(uuid())
+  orderId       String
+  productId     String
+  quantity      Int
+  price         Float
+  order         Order  @relation(fields: [orderId], references: [id])
 }
