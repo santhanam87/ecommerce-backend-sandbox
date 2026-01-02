@@ -12,6 +12,7 @@ import { UsersModule } from './users/users.module';
 import { ProductModule } from './product/product.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { OrderModule } from './order/order.module';
+import { CategoryModule } from './category/category.module';
 @Module({
   imports: [
     ClientsModule.register([
@@ -29,6 +30,7 @@ import { OrderModule } from './order/order.module';
     ProductModule,
     InventoryModule,
     OrderModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [

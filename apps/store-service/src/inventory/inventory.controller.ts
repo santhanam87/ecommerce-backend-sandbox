@@ -20,9 +20,12 @@ export class InventoryController {
     @Inject('STORE_SERVICE') private readonly messageClient: ClientProxy,
   ) {}
 
-  @MessagePattern({ event: 'order_created' })
+  @MessagePattern({ event: 'product_created' })
   createInventory(createInventoryDto: CreateInventoryDto) {
-    console.info('****** creating inventory *******');
+    console.info(
+      '****** creating inventory *******',
+      createInventoryDto.productId,
+    );
     return this.inventoryService.createInventoryItem(createInventoryDto);
   }
 

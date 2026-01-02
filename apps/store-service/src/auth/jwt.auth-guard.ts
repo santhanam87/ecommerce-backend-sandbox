@@ -1,4 +1,8 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
@@ -18,6 +22,29 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (isPublic) {
       return true;
     }
+    const isRpc = context.getType() === 'rpc';
+
+    if (isRpc) {
+      // Extract data from the TCP context
+      // const rpcContext = context.switchToRpc().getData();
+      // const token = rpcContext.token; // Access the 'token' field we sent
+
+      // if (!token) {
+      //   throw new UnauthorizedException('Missing authentication token');
+      // }
+
+      try {
+        // Validate the token (sync validation for simplicity)
+        // const user = this.jwtService.verify(token);
+        // Optionally attach the user payload to the data for use in the handler
+        // rpcContext.user = user;
+        return true;
+      } catch (e) {
+        console.info(e);
+        throw new UnauthorizedException('Invalid token');
+      }
+    }
+
     return super.canActivate(context);
   }
 }

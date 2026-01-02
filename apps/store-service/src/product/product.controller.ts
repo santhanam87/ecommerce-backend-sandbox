@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Patch,
   Post,
@@ -11,10 +12,14 @@ import {
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product-dto';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
+import { ClientProxy } from '@nestjs/microservices';
 @UseGuards(JwtAuthGuard)
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    private readonly productService: ProductService,
+    @Inject('STORE_SERVICE') private readonly messageClient: ClientProxy,
+  ) {}
 
   @Get()
   async getAllProducts() {
@@ -27,8 +32,14 @@ export class ProductController {
   }
 
   @Post()
-  createProduct(@Body() payload: CreateProductDto) {
-    return this.productService.createProduct(payload);
+  async createProduct(@Body() payload: CreateProductDto) {
+    const product = await this.productService.createProduct(payload);
+    const { id: productId } = product;
+    this.messageClient.emit(
+      { event: 'product_created' },
+      { productId, availableQty: 0 },
+    );
+    return product;
   }
 
   @Patch(':id')

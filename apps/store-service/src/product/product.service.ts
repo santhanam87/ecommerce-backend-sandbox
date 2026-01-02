@@ -17,15 +17,9 @@ export class ProductService {
     return product;
   }
   async createProduct(payload: CreateProductDto) {
-    try {
-      const product = await this.prisma.product.create({
-        data: payload,
-      });
-      console.info(product);
-      return product;
-    } catch (e) {
-      console.info(e);
-    }
+    return await this.prisma.product.create({
+      data: payload,
+    });
   }
   async deleteProduct(id: string): Promise<Product> {
     const product = await this.prisma.product.delete({
