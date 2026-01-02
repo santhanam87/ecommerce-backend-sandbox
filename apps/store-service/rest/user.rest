@@ -1,6 +1,5 @@
 ###
 GET http://localhost:3000
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlZDE0MDUxLTBjY2EtNDc1MC1iOWVkLTk0Zjg2ODMwODQzZiIsInN1YiI6ImpvaG5kb2UxIiwiaWF0IjoxNzY2MzU4OTE5LCJleHAiOjE3NjY0NDUzMTl9.Ia4dqixXX6IKsBlyILzrsV89rIwDigclShdW2q_3gDk
 
 ###
 POST http://localhost:3000/users
@@ -9,8 +8,8 @@ Content-Type: application/json
 {
   "name": "John Doe",
   "password": "securepassword",
-  "email": "john.doe+2@example.com",
-  "userName": "johndoe2"
+  "email": "john.doe@example.com",
+  "userName": "johndoe"
 }
 
 ###
@@ -19,7 +18,7 @@ Content-Type: application/json
 
 {
   "password": "securepassword",
-  "userName": "johndoe1"
+  "userName": "johndoe"
 }
 
 ###

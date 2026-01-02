@@ -11,7 +11,6 @@ export class AppController {
 
   @MessagePattern({ event: 'test' })
   processTestMessage(data: string) {
-    console.info('hello');
     return data + 'some more information';
   }
 

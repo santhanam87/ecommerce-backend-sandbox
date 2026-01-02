@@ -8,7 +8,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
   imports: [
     ClientsModule.register([
       {
-        name: 'ORDER_SERVICE',
+        name: 'STORE_SERVICE',
         transport: Transport.TCP,
       },
     ]),

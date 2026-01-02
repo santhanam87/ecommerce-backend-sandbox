@@ -5,23 +5,24 @@ import {
   Inject,
   Param,
   Post,
-  // UseGuards,
+  UseGuards,
 } from '@nestjs/common';
-// import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
+import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
 import { InventoryService } from './inventory.service';
 import { CreateInventoryDto } from './dto/inventory-create.dto';
 import { ClientProxy, MessagePattern } from '@nestjs/microservices';
 
-//@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('inventory')
 export class InventoryController {
   constructor(
     private readonly inventoryService: InventoryService,
-    @Inject('ORDER_SERVICE') private readonly messageClient: ClientProxy,
+    @Inject('STORE_SERVICE') private readonly messageClient: ClientProxy,
   ) {}
 
-  @Post()
-  createInventory(@Body() createInventoryDto: CreateInventoryDto) {
+  @MessagePattern({ event: 'order_created' })
+  createInventory(createInventoryDto: CreateInventoryDto) {
+    console.info('****** creating inventory *******');
     return this.inventoryService.createInventoryItem(createInventoryDto);
   }
 

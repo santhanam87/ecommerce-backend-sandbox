@@ -9,7 +9,7 @@ import { PrismaExceptionFilter } from './prisma/prisma.exception.filter';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { ProductsModule } from './products/products.module';
+import { ProductModule } from './product/product.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { OrderModule } from './order/order.module';
 @Module({
@@ -26,7 +26,7 @@ import { OrderModule } from './order/order.module';
     PrismaModule,
     AuthModule,
     UsersModule,
-    ProductsModule,
+    ProductModule,
     InventoryModule,
     OrderModule,
   ],

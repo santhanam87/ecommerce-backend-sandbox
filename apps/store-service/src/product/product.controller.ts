@@ -8,27 +8,27 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ProductsService } from './products.service';
+import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product-dto';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
 @UseGuards(JwtAuthGuard)
-@Controller('products')
-export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+@Controller('product')
+export class ProductController {
+  constructor(private readonly productService: ProductService) {}
 
   @Get()
   async getAllProducts() {
-    return this.productsService.getAllProducts();
+    return this.productService.getAllProducts();
   }
 
   @Get(':id')
   async getProductById(@Param('id') id: string) {
-    return this.productsService.getProductById(id);
+    return this.productService.getProductById(id);
   }
 
   @Post()
-  async createProduct(@Body() payload: CreateProductDto) {
-    return this.productsService.createProduct(payload);
+  createProduct(@Body() payload: CreateProductDto) {
+    return this.productService.createProduct(payload);
   }
 
   @Patch(':id')
@@ -36,11 +36,11 @@ export class ProductsController {
     @Param('id') id: string,
     @Body() payload: Partial<CreateProductDto>,
   ) {
-    return this.productsService.updateProduct(id, payload);
+    return this.productService.updateProduct(id, payload);
   }
 
   @Delete(':id')
   async deleteProduct(@Param('id') id: string) {
-    return this.productsService.deleteProduct(id);
+    return this.productService.deleteProduct(id);
   }
 }

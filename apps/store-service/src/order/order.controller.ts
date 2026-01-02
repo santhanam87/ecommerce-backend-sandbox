@@ -8,7 +8,7 @@ import { type Order } from 'generated/prisma/client';
 export class OrderController {
   constructor(
     private readonly orderService: OrderService,
-    @Inject('ORDER_SERVICE') private readonly messageClient: ClientProxy,
+    @Inject('STORE_SERVICE') private readonly messageClient: ClientProxy,
   ) {}
   @Post()
   public async createOrder(@Body() createOrderPayload: CreateOrderDto) {
