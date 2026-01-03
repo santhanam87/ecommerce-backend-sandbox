@@ -4,12 +4,16 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from 'src/common/decorator/public.decorator';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(private reflector: Reflector) {
+  constructor(
+    private reflector: Reflector,
+    private jwtService: JwtService,
+  ) {
     super();
   }
   canActivate(
@@ -25,23 +29,16 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const isRpc = context.getType() === 'rpc';
 
     if (isRpc) {
-      // Extract data from the TCP context
-      // const rpcContext = context.switchToRpc().getData();
-      // const token = rpcContext.token; // Access the 'token' field we sent
-
-      // if (!token) {
-      //   throw new UnauthorizedException('Missing authentication token');
-      // }
-
+      const rpcContext = context.switchToRpc().getData();
+      const token = rpcContext.token as string;
+      if (!token) {
+        throw new UnauthorizedException('Missing authentication token');
+      }
       try {
-        // Validate the token (sync validation for simplicity)
-        // const user = this.jwtService.verify(token);
-        // Optionally attach the user payload to the data for use in the handler
-        // rpcContext.user = user;
+        delete rpcContext.token;
         return true;
       } catch (e) {
-        console.info(e);
-        throw new UnauthorizedException('Invalid token');
+        throw new UnauthorizedException(e.message);
       }
     }
 

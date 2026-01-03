@@ -7,12 +7,15 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product-dto';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
 import { ClientProxy } from '@nestjs/microservices';
+import JwtTokenUtil from 'src/common/utils/jwt-token.util';
+import { type Request } from 'express';
 @UseGuards(JwtAuthGuard)
 @Controller('product')
 export class ProductController {
@@ -32,12 +35,16 @@ export class ProductController {
   }
 
   @Post()
-  async createProduct(@Body() payload: CreateProductDto) {
+  async createProduct(
+    @Req() request: Request,
+    @Body() payload: CreateProductDto,
+  ) {
     const product = await this.productService.createProduct(payload);
+    const token = JwtTokenUtil.getToken(request.headers.authorization || '');
     const { id: productId } = product;
     this.messageClient.emit(
       { event: 'product_created' },
-      { productId, availableQty: 0 },
+      { productId, availableQty: 0, token },
     );
     return product;
   }

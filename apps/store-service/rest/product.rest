@@ -24,7 +24,11 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI5OTNmNmM2LWZkZTktNGUyYi1hZDEzLTc4ZTJiMWU3NDFiNiIsInN1YiI6ImpvaG5kb2UiLCJpYXQiOjE3NjczMjcxNjksImV4cCI6MTc2NzQxMzU2OX0.tQARCmppuRmGZOeGycC5UxaGuWE724P-LWC1Ua0S7w8
 
 {
-    "name": "product5",
+    "name": "product10",
     "price": 3,
     "categoryId": "8f4a4479-6f4d-4ac5-a85b-e73d1f3db846"
 }
+
+###
+GET http://localhost:3000/inventory/fea999f1-4922-4d22-818e-8f8c634d5600
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI5OTNmNmM2LWZkZTktNGUyYi1hZDEzLTc4ZTJiMWU3NDFiNiIsInN1YiI6ImpvaG5kb2UiLCJpYXQiOjE3NjczMjcxNjksImV4cCI6MTc2NzQxMzU2OX0.tQARCmppuRmGZOeGycC5UxaGuWE724P-LWC1Ua0S7w8
