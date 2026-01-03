@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Req,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
@@ -16,6 +17,8 @@ import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
 import { ClientProxy } from '@nestjs/microservices';
 import JwtTokenUtil from 'src/common/utils/jwt-token.util';
 import { type Request } from 'express';
+import { MessageExceptionFilter } from 'src/common/filter/rcp-exception.filter';
+
 @UseGuards(JwtAuthGuard)
 @Controller('product')
 export class ProductController {
@@ -33,7 +36,7 @@ export class ProductController {
   async getProductById(@Param('id') id: string) {
     return this.productService.getProductById(id);
   }
-
+  @UseFilters(MessageExceptionFilter)
   @Post()
   async createProduct(
     @Req() request: Request,

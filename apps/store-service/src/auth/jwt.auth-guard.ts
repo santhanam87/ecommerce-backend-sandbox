@@ -35,6 +35,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         throw new UnauthorizedException('Missing authentication token');
       }
       try {
+        this.jwtService.verify(token, { secret: 'your_jwt_secret_key' });
         delete rpcContext.token;
         return true;
       } catch (e) {

@@ -13,6 +13,7 @@ import { ProductModule } from './product/product.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { OrderModule } from './order/order.module';
 import { CategoryModule } from './category/category.module';
+import { MessageExceptionFilter } from './common/filter/rcp-exception.filter';
 @Module({
   imports: [
     ClientsModule.register([
@@ -41,6 +42,10 @@ import { CategoryModule } from './category/category.module';
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: MessageExceptionFilter,
     },
     AppService,
   ],
