@@ -1,14 +1,10 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
   moduleFormat = "cjs"
-  
 }
 
 datasource db {
@@ -20,10 +16,8 @@ model User {
   email     String   @unique
   password  String
   name      String
-  userName  String    @unique
   createdAt DateTime @default(now())
 }
-
 
 model Category {
   id        String   @id @default(uuid())
@@ -42,14 +36,36 @@ model Product {
   createdAt   DateTime @default(now())
 }
 
+model Inventory {
+  id                  String    @id @default(uuid())
+  productId           String    @unique
+  availableQuantity   Int
+  reservedQuantity    Int       @default(0)
+  updatedAt           DateTime  @updatedAt
+}
 
 model Order {
-  id          String      @id @default(uuid())
-  userId      String
-  status      String
-  totalAmount Float
-  createdAt   DateTime    @default(now())
-  orderItems  OrderItem[]
+  id              String      @id @default(uuid())
+  userId          String
+  status          String
+  totalAmount     Float
+  createdAt       DateTime    @default(now())
+  items           OrderItem[]
+  shippingAddress ShippingAddress?
+}
+
+model ShippingAddress {
+  id         String @id @default(uuid())
+  orderId    String @unique
+  fullName   String
+  address1   String
+  address2   String?
+  city       String
+  state      String
+  postalCode String
+  country    String
+
+  order Order @relation(fields: [orderId], references: [id])
 }
 
 model OrderItem {
@@ -61,10 +77,39 @@ model OrderItem {
   order         Order  @relation(fields: [orderId], references: [id])
 }
 
-model Inventory {
-  id            String    @id @default(uuid())
-  productId     String    @unique
-  availableQty  Int
-  reservedQty   Int       @default(0)
-  updatedAt     DateTime  @updatedAt
+model Shipment {
+  id        String          @id @default(uuid())
+  orderId   String          @unique
+  status    ShipmentStatus
+  createdAt DateTime        @default(now())
+}
+
+enum OrderStatus {
+  CREATED
+  RESERVED
+  PAID
+  SHIPPED
+  FAILED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CARD
+  UPI
+  NET_BANKING
+  WALLET
+}
+
+enum ShipmentStatus {
+  CREATED
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }
