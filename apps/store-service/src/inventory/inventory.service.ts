@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { Inventory } from 'generated/prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateInventoryDto } from './dto/inventory-create.dto';
 
 @Injectable()
 export class InventoryService {
   constructor(private readonly prisma: PrismaService) {}
-  async createInventoryItem(data: CreateInventoryDto): Promise<Inventory> {
-    const inventory = await this.prisma.inventory.create({ data });
-    return inventory;
+  async createInventoryItem(data: CreateInventoryDto) {
+    return await this.prisma.inventory.create({
+      data: { ...data },
+    });
   }
   async getInventoryByProductId(productId: string) {
     const inventory = await this.prisma.inventory.findUnique({
@@ -22,10 +22,10 @@ export class InventoryService {
         productId,
       },
       data: {
-        availableQty: {
+        availableQuantity: {
           decrement: quantity,
         },
-        reservedQty: {
+        reservedQuantity: {
           increment: quantity,
         },
       },

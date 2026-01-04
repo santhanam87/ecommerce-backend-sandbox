@@ -18,7 +18,7 @@ export class ProductService {
   }
   async createProduct(payload: CreateProductDto) {
     return await this.prisma.product.create({
-      data: payload,
+      data: { ...payload, status: 'PENDING' },
     });
   }
   async deleteProduct(id: string): Promise<Product> {

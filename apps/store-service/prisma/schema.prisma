@@ -30,8 +30,8 @@ model Product {
   name        String
   description String?
   price       Float
-  isActive    Boolean  @default(true)
   categoryId  String
+  status       ProductStatus
   category    Category @relation(fields: [categoryId], references: [id])
   createdAt   DateTime @default(now())
 }
@@ -82,6 +82,12 @@ model Shipment {
   orderId   String          @unique
   status    ShipmentStatus
   createdAt DateTime        @default(now())
+}
+
+enum ProductStatus {
+  PENDING
+  ACTIVE
+  FAILED
 }
 
 enum OrderStatus {

@@ -21,16 +21,30 @@ export class InventoryController {
   ) {}
 
   @MessagePattern({ event: 'product_created' })
-  createInventory(createInventoryDto: CreateInventoryDto) {
-    console.info(
-      '****** creating inventory *******',
-      createInventoryDto.productId,
-    );
-    return this.inventoryService.createInventoryItem(createInventoryDto);
+  async createInventory({
+    token,
+    ...createInventoryDto
+  }: CreateInventoryDto & { token: string }) {
+    try {
+      const inventroy =
+        await this.inventoryService.createInventoryItem(createInventoryDto);
+      this.messageClient.emit(
+        { event: 'product_inventory_created' },
+        { productId: createInventoryDto.productId, token },
+      );
+      return inventroy;
+    } catch (err) {
+      this.messageClient.emit(
+        { event: 'product_inventory_creation_failed' },
+        { productId: createInventoryDto.productId, token },
+      );
+      console.error('Error creating inventory item:', err);
+    }
   }
-
   @Get(':productId')
   getInventory(@Param('productId') productId: string) {
+    this.messageClient.emit({ event: 'inventory_failed' }, { productId });
+    console.info('emit');
     return this.inventoryService.getInventoryByProductId(productId);
   }
 

@@ -4,26 +4,24 @@ import { UpdateUserDto } from './dto/udpate-user.dto';
 import { UserResponseDto } from './dto/user-response.dto';
 import { PasswordUtil } from 'src/common/utils/password.util';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { User } from './entity/user.entity';
+import { type User } from 'generated/prisma/client';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   public async createUser({
-    userName,
     email,
     password,
     name,
   }: CreateUserDto): Promise<UserResponseDto> {
-    const user = new User();
-    user.createdAt = new Date();
-    user.name = name;
-    user.userName = userName;
-    user.email = email;
-    user.password = PasswordUtil.hashPassword(password);
     const insertedUser = await this.prisma.user.create({
-      data: user,
+      data: {
+        name,
+        email,
+        password: PasswordUtil.hashPassword(password),
+        createdAt: new Date(),
+      },
     });
     return new UserResponseDto(insertedUser);
   }
@@ -40,13 +38,6 @@ export class UsersService {
     return user;
   }
 
-  public async getUserByName(userName: string): Promise<User | null> {
-    const user: User | null = await this.prisma.user.findUnique({
-      where: { userName },
-    });
-    return user;
-  }
-
   public async getUserById(id: string): Promise<User | null> {
     const user: User | null = await this.prisma.user.findUnique({
       where: { id },
@@ -54,19 +45,19 @@ export class UsersService {
     return user;
   }
 
-  public async deleteUserById(userName: string): Promise<boolean> {
+  public async deleteUserById(id: string): Promise<boolean> {
     const deletedUser = await this.prisma.user.delete({
-      where: { userName },
+      where: { id },
     });
     return deletedUser !== null;
   }
 
   public async updateUser(
-    userName: string,
+    id: string,
     updatedData: UpdateUserDto,
   ): Promise<UserResponseDto | null> {
     const user: User | null = await this.prisma.user.findUnique({
-      where: { userName },
+      where: { id },
     });
     if (!user) {
       return null;
@@ -75,7 +66,7 @@ export class UsersService {
       updatedData.password = PasswordUtil.hashPassword(updatedData.password);
     }
     const updatedUser = await this.prisma.user.update({
-      where: { userName },
+      where: { id },
       data: updatedData,
     });
     if (updatedUser) {

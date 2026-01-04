@@ -25,7 +25,7 @@ export class OrderService {
     });
     return await this.prisma.order.findMany({
       where: { id: order.id },
-      select: { orderItems: true, id: true, userId: true, status: true },
+      select: { items: true, id: true, userId: true, status: true },
     });
   }
 }

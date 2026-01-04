@@ -14,7 +14,7 @@ import {
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product-dto';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientProxy, MessagePattern } from '@nestjs/microservices';
 import JwtTokenUtil from 'src/common/utils/jwt-token.util';
 import { type Request } from 'express';
 import { MessageExceptionFilter } from 'src/common/filter/rcp-exception.filter';
@@ -45,11 +45,23 @@ export class ProductController {
     const product = await this.productService.createProduct(payload);
     const token = JwtTokenUtil.getToken(request.headers.authorization || '');
     const { id: productId } = product;
-    this.messageClient.emit(
-      { event: 'product_created' },
-      { productId, availableQty: 0, token },
-    );
+    this.messageClient.emit({ event: 'product_created' }, { productId, token });
     return product;
+  }
+
+  @MessagePattern({ event: 'product_inventory_created' })
+  async updateProductStatus(data: { productId: string }) {
+    await this.productService.updateProduct(data.productId, {
+      status: 'ACTIVE',
+    });
+  }
+
+  @MessagePattern({ event: 'product_inventory_creation_failed' })
+  async handleInventoryCreationFailure(data: { productId: string }) {
+    console.info('inventory creation failed for product:', data.productId);
+    await this.productService.updateProduct(data.productId, {
+      status: 'FAILED',
+    });
   }
 
   @Patch(':id')
