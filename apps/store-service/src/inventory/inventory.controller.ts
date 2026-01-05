@@ -21,22 +21,21 @@ export class InventoryController {
   ) {}
 
   @MessagePattern({ event: 'product_created' })
-  async createInventory({
-    token,
-    ...createInventoryDto
-  }: CreateInventoryDto & { token: string }) {
+  async createInventory(
+    createInventoryDto: CreateInventoryDto & { token: string },
+  ) {
     try {
       const inventroy =
         await this.inventoryService.createInventoryItem(createInventoryDto);
       this.messageClient.emit(
         { event: 'product_inventory_created' },
-        { productId: createInventoryDto.productId, token },
+        { productId: createInventoryDto.productId },
       );
       return inventroy;
     } catch (err) {
       this.messageClient.emit(
         { event: 'product_inventory_creation_failed' },
-        { productId: createInventoryDto.productId, token },
+        { productId: createInventoryDto.productId },
       );
       console.error('Error creating inventory item:', err);
     }

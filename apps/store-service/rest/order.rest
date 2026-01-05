@@ -2,4 +2,27 @@
 
 POST http://localhost:3000/order
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRmNzNjMjllLTFiNzQtNGMyYi05NjMxLWY0NzhiMDQ3ZjhlNiIsIm5hbWUiOiJKb2huIERvZSIsImVtYWlsIjoiam9obi5kb2VAZXhhbXBsZS5jb20iLCJpYXQiOjE3Njc1ODAxMDQsImV4cCI6MTc2NzY2NjUwNH0.bB4eeLXwrSyIdiTgepHs8kWteslsd3qKwjwGTmOLsP0
 
+{
+    "items": [
+        {
+            "productId": "prod-123",
+            "quantity": 2,
+            "price": 19.99
+        },
+        {
+            "productId": "prod-456",
+            "quantity": 1,
+            "price": 18.37
+        }
+    ],
+    "shippingAddress": {
+        "address1": "123 Main St",
+        "city": "Anytown",
+        "state": "CA",
+        "postalCode": "12345",
+        "country": "USA"
+    }
+              
+}

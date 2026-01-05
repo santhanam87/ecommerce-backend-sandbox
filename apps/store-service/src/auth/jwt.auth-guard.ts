@@ -1,19 +1,11 @@
-import {
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from 'src/common/decorator/public.decorator';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(
-    private reflector: Reflector,
-    private jwtService: JwtService,
-  ) {
+  constructor(private reflector: Reflector) {
     super();
   }
   canActivate(
@@ -29,17 +21,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const isRpc = context.getType() === 'rpc';
 
     if (isRpc) {
-      const rpcContext = context.switchToRpc().getData();
-      const token = rpcContext.token as string;
-      if (!token) {
-        throw new UnauthorizedException('Missing authentication token');
-      }
-      try {
-        this.jwtService.verify(token, { secret: 'your_jwt_secret_key' });
-        return true;
-      } catch (e) {
-        throw new UnauthorizedException(e.message);
-      }
+      return true;
     }
 
     return super.canActivate(context);

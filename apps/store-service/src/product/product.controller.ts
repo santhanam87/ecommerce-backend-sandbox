@@ -15,7 +15,6 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product-dto';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
 import { ClientProxy, MessagePattern } from '@nestjs/microservices';
-import JwtTokenUtil from 'src/common/utils/jwt-token.util';
 import { type Request } from 'express';
 import { MessageExceptionFilter } from 'src/common/filter/rcp-exception.filter';
 
@@ -43,9 +42,8 @@ export class ProductController {
     @Body() payload: CreateProductDto,
   ) {
     const product = await this.productService.createProduct(payload);
-    const token = JwtTokenUtil.getToken(request.headers.authorization || '');
     const { id: productId } = product;
-    this.messageClient.emit({ event: 'product_created' }, { productId, token });
+    this.messageClient.emit({ event: 'product_created' }, { productId });
     return product;
   }
 

@@ -1,13 +1,9 @@
-import { IsString, IsNotEmpty, IsArray } from 'class-validator';
+import { IsArray } from 'class-validator';
 import { CreateOrderProductDto } from './order-product-create.dto';
+import { ShippingAddressDto } from './shipping-address.dto';
 
 export class CreateOrderDto {
-  @IsString()
-  @IsNotEmpty()
-  userId: string;
-  @IsString()
-  @IsNotEmpty()
-  status: string;
   @IsArray()
-  orderItems: CreateOrderProductDto[];
+  items: CreateOrderProductDto[];
+  shippingAddress: ShippingAddressDto;
 }

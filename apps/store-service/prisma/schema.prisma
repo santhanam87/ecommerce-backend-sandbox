@@ -26,14 +26,14 @@ model Category {
 }
 
 model Product {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  price       Float
-  categoryId  String
-  status       ProductStatus
-  category    Category @relation(fields: [categoryId], references: [id])
-  createdAt   DateTime @default(now())
+  id                String   @id @default(uuid())
+  name              String   @unique
+  description       String?
+  price             Float
+  categoryId        String
+  status            ProductStatus @default(PENDING)
+  category          Category @relation(fields: [categoryId], references: [id])
+  createdAt         DateTime @default(now())
 }
 
 model Inventory {
@@ -47,7 +47,7 @@ model Inventory {
 model Order {
   id              String      @id @default(uuid())
   userId          String
-  status          String
+  status          OrderStatus @default(PENDING)
   totalAmount     Float
   createdAt       DateTime    @default(now())
   items           OrderItem[]
@@ -64,17 +64,16 @@ model ShippingAddress {
   state      String
   postalCode String
   country    String
-
   order Order @relation(fields: [orderId], references: [id])
 }
 
 model OrderItem {
-  id            String @id @default(uuid())
-  orderId       String
-  productId     String
-  quantity      Int
-  price         Float
-  order         Order  @relation(fields: [orderId], references: [id])
+  id                  String    @id @default(uuid())
+  orderId             String
+  productId           String
+  quantity            Int
+  price               Float
+  order               Order     @relation(fields: [orderId], references: [id])
 }
 
 model Shipment {
@@ -91,12 +90,10 @@ enum ProductStatus {
 }
 
 enum OrderStatus {
-  CREATED
-  RESERVED
-  PAID
-  SHIPPED
+  PENDING
+  CONFIRMED
   FAILED
-  CANCELLED
+  SHIPPED
 }
 
 enum PaymentStatus {
