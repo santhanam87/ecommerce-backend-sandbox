@@ -9,7 +9,7 @@ import {
 import { CreateOrderDto } from './dto/order-create.dto';
 import { OrderService } from './order.service';
 import { ClientProxy, MessagePattern } from '@nestjs/microservices';
-import { type User, type Order } from 'generated/prisma/client';
+import { OrderStatus, type User } from 'generated/prisma/client';
 import { GetUser } from 'src/common/decorator/user.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
 @UseGuards(JwtAuthGuard)
@@ -24,24 +24,17 @@ export class OrderController {
     @GetUser() user: User,
     @Body() createOrderPayload: CreateOrderDto,
   ) {
-    try {
-      const order = await this.orderService.createOrder(
-        user,
-        createOrderPayload,
-      );
-      return order;
-    } catch (err) {
-      console.error('Error creating order:', err);
-      throw err;
-    }
+    const order = await this.orderService.createOrder(user, createOrderPayload);
+    this.messageClient.emit({ event: 'order_created' }, order);
+    return order;
   }
   @MessagePattern({ event: 'stock_reserved' })
-  public processPayment(order: Order) {
-    console.info('stock reserved, process payment:', order.id);
-    // this.messageClient.emit({ event: 'process_payment' }, order);
+  public async processPayment(orderId: string) {
+    await this.orderService.updateOrderStockStatus(orderId, true);
   }
   @MessagePattern({ event: 'stock_reserved_failed' })
-  public updateOrderStatus(order: Order) {
-    console.info('stock reserve failed:', order.id);
+  public async updateOrderStatus(orderId: string) {
+    await this.orderService.updateOrderStockStatus(orderId, false);
+    await this.orderService.updateOrderStatus(orderId, OrderStatus.FAILED);
   }
 }

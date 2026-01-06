@@ -7,7 +7,7 @@ export class InventoryService {
   constructor(private readonly prisma: PrismaService) {}
   async createInventoryItem(data: CreateInventoryDto) {
     return await this.prisma.inventory.create({
-      data: { ...data },
+      data: { ...data, availableQuantity: 0 },
     });
   }
   async getInventoryByProductId(productId: string) {
@@ -17,22 +17,24 @@ export class InventoryService {
     return inventory;
   }
   async adjustStock(productId: string, quantity: number) {
-    const inventory = await this.prisma.inventory.updateMany({
-      where: {
-        productId,
-      },
-      data: {
-        availableQuantity: {
-          decrement: quantity,
+    await this.prisma.$transaction(async (transaction) => {
+      const inventory = await transaction.inventory.findUnique({
+        where: { productId },
+      });
+      if (!inventory) {
+        throw new Error('Inventory item not found');
+      }
+      if (inventory.availableQuantity - quantity < 0) {
+        throw new Error('Insufficient stock');
+      }
+      await transaction.inventory.update({
+        where: { productId },
+        data: {
+          availableQuantity: { decrement: quantity },
+          reservedQuantity: { increment: quantity },
         },
-        reservedQuantity: {
-          increment: quantity,
-        },
-      },
+      });
     });
-    if (inventory.count === 0) {
-      return null;
-    }
     return this.getInventoryByProductId(productId);
   }
 }

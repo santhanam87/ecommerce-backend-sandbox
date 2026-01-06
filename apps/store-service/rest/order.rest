@@ -2,19 +2,14 @@
 
 POST http://localhost:3000/order
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRmNzNjMjllLTFiNzQtNGMyYi05NjMxLWY0NzhiMDQ3ZjhlNiIsIm5hbWUiOiJKb2huIERvZSIsImVtYWlsIjoiam9obi5kb2VAZXhhbXBsZS5jb20iLCJpYXQiOjE3Njc1ODAxMDQsImV4cCI6MTc2NzY2NjUwNH0.bB4eeLXwrSyIdiTgepHs8kWteslsd3qKwjwGTmOLsP0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRmNzNjMjllLTFiNzQtNGMyYi05NjMxLWY0NzhiMDQ3ZjhlNiIsIm5hbWUiOiJKb2huIERvZSIsImVtYWlsIjoiam9obi5kb2VAZXhhbXBsZS5jb20iLCJpYXQiOjE3Njc2NzQ2NzAsImV4cCI6MTc2Nzc2MTA3MH0.fCcNtu3bMN3lGDCXih4vbp_XAIzlDd6wLAkQHicLTVE
 
 {
     "items": [
         {
-            "productId": "prod-123",
-            "quantity": 2,
+            "productId": "446e250d-d579-4625-b032-e36fb4a1b166",
+            "quantity": 200,
             "price": 19.99
-        },
-        {
-            "productId": "prod-456",
-            "quantity": 1,
-            "price": 18.37
         }
     ],
     "shippingAddress": {
