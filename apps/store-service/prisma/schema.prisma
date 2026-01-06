@@ -45,13 +45,15 @@ model Inventory {
 }
 
 model Order {
-  id              String      @id @default(uuid())
-  userId          String
-  status          OrderStatus @default(PENDING)
-  totalAmount     Float
-  createdAt       DateTime    @default(now())
-  items           OrderItem[]
-  shippingAddress ShippingAddress?
+  id                  String      @id @default(uuid())
+  userId              String
+  status              OrderStatus @default(PENDING)
+  totalAmount         Float
+  createdAt           DateTime    @default(now())
+  items               OrderItem[]
+  shippingAddress     ShippingAddress?
+  isStockReserved     Boolean     @default(false)
+  isPaymentAuthorized Boolean     @default(false)
 }
 
 model ShippingAddress {

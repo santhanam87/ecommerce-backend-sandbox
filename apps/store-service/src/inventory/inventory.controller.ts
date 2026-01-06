@@ -11,6 +11,7 @@ import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
 import { InventoryService } from './inventory.service';
 import { CreateInventoryDto } from './dto/inventory-create.dto';
 import { ClientProxy, MessagePattern } from '@nestjs/microservices';
+import { type OrderItem } from 'generated/prisma/browser';
 
 @UseGuards(JwtAuthGuard)
 @Controller('inventory')
@@ -21,9 +22,7 @@ export class InventoryController {
   ) {}
 
   @MessagePattern({ event: 'product_created' })
-  async createInventory(
-    createInventoryDto: CreateInventoryDto & { token: string },
-  ) {
+  async createInventory(createInventoryDto: CreateInventoryDto) {
     try {
       const inventroy =
         await this.inventoryService.createInventoryItem(createInventoryDto);
@@ -53,8 +52,19 @@ export class InventoryController {
   }
 
   @MessagePattern({ event: 'order_created' })
-  public processPayment(order: any) {
-    console.info('reserve stock for order:', order.id);
-    this.messageClient.emit({ event: 'stock_reserved' }, order);
+  public async processPayment(order: { items: OrderItem[]; id: string }) {
+    try {
+      const itemPromises = order.items.map(async (item) => {
+        return this.inventoryService.adjustStock(
+          item.productId as string,
+          item.quantity as number,
+        );
+      });
+      await Promise.all(itemPromises);
+      this.messageClient.emit({ event: 'stock_reserved' }, order.id);
+    } catch (err) {
+      this.messageClient.emit({ event: 'stock_reserved_failed' }, order.id);
+      throw err;
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateOrderDto } from './dto/order-create.dto';
-import { User } from 'generated/prisma/client';
+import { OrderStatus, User } from 'generated/prisma/client';
 
 @Injectable()
 export class OrderService {
@@ -10,38 +10,61 @@ export class OrderService {
     { id: userId, name: fullName }: User,
     { items, shippingAddress }: CreateOrderDto,
   ) {
-    try {
-      console.info(userId, fullName);
-      const order = await this.prisma.$transaction(async (transaction) => {
-        const totalAmount = items.reduce((sum, { price, quantity }) => {
-          sum += price * quantity;
-          return sum;
-        }, 0);
-        const orderTransaction = await transaction.order.create({
-          data: { userId, totalAmount },
-        });
-        await transaction.shippingAddress.create({
-          data: {
-            ...shippingAddress,
-            orderId: orderTransaction.id,
-            fullName,
-          },
-        });
-        await transaction.orderItem.createMany({
-          data: items.map((orderItem) => ({
-            ...orderItem,
-            orderId: orderTransaction.id,
-          })),
-        });
-        return orderTransaction;
+    const order = await this.prisma.$transaction(async (transaction) => {
+      const totalAmount = items.reduce((sum, { price, quantity }) => {
+        sum += price * quantity;
+        return sum;
+      }, 0);
+      const orderTransaction = await transaction.order.create({
+        data: { userId, totalAmount },
       });
-      return await this.prisma.order.findMany({
-        where: { id: order.id },
-        select: { items: true, id: true, userId: true, status: true },
+      await transaction.shippingAddress.create({
+        data: {
+          ...shippingAddress,
+          orderId: orderTransaction.id,
+          fullName,
+        },
       });
-    } catch (err) {
-      console.error('Transaction failed:', err);
-      throw err;
-    }
+      await transaction.orderItem.createMany({
+        data: items.map((orderItem) => ({
+          ...orderItem,
+          orderId: orderTransaction.id,
+        })),
+      });
+      return orderTransaction;
+    });
+    return await this.prisma.order.findUnique({
+      where: { id: order.id },
+      select: {
+        items: true,
+        id: true,
+        userId: true,
+        status: true,
+        totalAmount: true,
+        createdAt: true,
+        shippingAddress: true,
+      },
+    });
+  }
+  public async updateOrderStockStatus(id: string, isStockReserved: boolean) {
+    return await this.prisma.order.update({
+      where: { id },
+      data: { isStockReserved },
+    });
+  }
+  public async updateOrderPaymentStatus(
+    orderId: string,
+    isPaymentAuthorized: boolean,
+  ) {
+    return await this.prisma.order.update({
+      where: { id: orderId },
+      data: { isPaymentAuthorized },
+    });
+  }
+  public async updateOrderStatus(orderId: string, status: OrderStatus) {
+    return await this.prisma.order.update({
+      where: { id: orderId },
+      data: { status },
+    });
   }
 }
