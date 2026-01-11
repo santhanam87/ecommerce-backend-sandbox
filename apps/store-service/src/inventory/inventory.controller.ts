@@ -40,6 +40,7 @@ export class InventoryController {
       console.error('Error creating inventory item:', err);
     }
   }
+
   @Get(':productId')
   getInventory(@Param('productId') productId: string) {
     this.messageClient.emit({ event: 'inventory_failed' }, { productId });
