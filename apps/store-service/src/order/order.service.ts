@@ -8,7 +8,7 @@ export class OrderService {
   constructor(private readonly prisma: PrismaService) {}
   public async createOrder(
     { id: userId, name: fullName }: User,
-    { items, shippingAddress }: CreateOrderDto,
+    { items, shippingAddress, paymentId }: CreateOrderDto,
   ) {
     const order = await this.prisma.$transaction(async (transaction) => {
       const totalAmount = items.reduce((sum, { price, quantity }) => {
@@ -16,7 +16,7 @@ export class OrderService {
         return sum;
       }, 0);
       const orderTransaction = await transaction.order.create({
-        data: { userId, totalAmount },
+        data: { userId, totalAmount, paymentId },
       });
       await transaction.shippingAddress.create({
         data: {
@@ -43,6 +43,7 @@ export class OrderService {
         totalAmount: true,
         createdAt: true,
         shippingAddress: true,
+        paymentId: true,
       },
     });
   }
@@ -66,5 +67,15 @@ export class OrderService {
       where: { id: orderId },
       data: { status },
     });
+  }
+  public async checkOrderCompletion(orderId: string) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+    });
+    if (order?.isStockReserved && order?.isPaymentAuthorized) {
+      await this.updateOrderStatus(orderId, OrderStatus.CONFIRMED);
+      return true;
+    }
+    return false;
   }
 }

@@ -23,6 +23,7 @@ export class InventoryController {
 
   @MessagePattern({ event: 'product_created' })
   async createInventory(createInventoryDto: CreateInventoryDto) {
+    console.info('product created received in inventory');
     try {
       const inventroy =
         await this.inventoryService.createInventoryItem(createInventoryDto);
@@ -39,6 +40,7 @@ export class InventoryController {
       console.error('Error creating inventory item:', err);
     }
   }
+
   @Get(':productId')
   getInventory(@Param('productId') productId: string) {
     this.messageClient.emit({ event: 'inventory_failed' }, { productId });
@@ -53,6 +55,7 @@ export class InventoryController {
 
   @MessagePattern({ event: 'order_created' })
   public async processPayment(order: { items: OrderItem[]; id: string }) {
+    console.info('order created received in inventory:', order.id);
     try {
       const itemPromises = order.items.map(async (item) => {
         return this.inventoryService.adjustStock(
@@ -60,6 +63,7 @@ export class InventoryController {
           item.quantity as number,
         );
       });
+      console.info(itemPromises);
       await Promise.all(itemPromises);
       this.messageClient.emit({ event: 'stock_reserved' }, order.id);
     } catch (err) {

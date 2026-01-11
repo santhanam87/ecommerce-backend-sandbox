@@ -1,8 +1,14 @@
 ###
+GET http://localhost:3000/order
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRmNzNjMjllLTFiNzQtNGMyYi05NjMxLWY0NzhiMDQ3ZjhlNiIsIm5hbWUiOiJKb2huIERvZSIsImVtYWlsIjoiam9obi5kb2VAZXhhbXBsZS5jb20iLCJpYXQiOjE3NjgwOTg5ODUsImV4cCI6MTc2ODE4NTM4NX0.q1iZYWvgjocmFgIr6eItxLYF0M4pl76ptKc-SpbI7Mc
 
+
+
+###
 POST http://localhost:3000/order
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRmNzNjMjllLTFiNzQtNGMyYi05NjMxLWY0NzhiMDQ3ZjhlNiIsIm5hbWUiOiJKb2huIERvZSIsImVtYWlsIjoiam9obi5kb2VAZXhhbXBsZS5jb20iLCJpYXQiOjE3Njc2NzQ2NzAsImV4cCI6MTc2Nzc2MTA3MH0.fCcNtu3bMN3lGDCXih4vbp_XAIzlDd6wLAkQHicLTVE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRmNzNjMjllLTFiNzQtNGMyYi05NjMxLWY0NzhiMDQ3ZjhlNiIsIm5hbWUiOiJKb2huIERvZSIsImVtYWlsIjoiam9obi5kb2VAZXhhbXBsZS5jb20iLCJpYXQiOjE3NjgwOTg5ODUsImV4cCI6MTc2ODE4NTM4NX0.q1iZYWvgjocmFgIr6eItxLYF0M4pl76ptKc-SpbI7Mc
 
 {
     "items": [
@@ -18,6 +24,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRmNzNjMjllL
         "state": "CA",
         "postalCode": "12345",
         "country": "USA"
-    }
-              
+    },
+    "paymentId": "0f189ef0-5376-48aa-bdc9-7649ddc3ac44"      
 }
