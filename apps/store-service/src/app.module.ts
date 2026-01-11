@@ -14,6 +14,7 @@ import { InventoryModule } from './inventory/inventory.module';
 import { OrderModule } from './order/order.module';
 import { CategoryModule } from './category/category.module';
 import { MessageExceptionFilter } from './common/filter/rcp-exception.filter';
+import { CcardModule } from './ccard/ccard.module';
 @Module({
   imports: [
     ClientsModule.register([
@@ -32,6 +33,7 @@ import { MessageExceptionFilter } from './common/filter/rcp-exception.filter';
     InventoryModule,
     OrderModule,
     CategoryModule,
+    CcardModule,
   ],
   controllers: [AppController],
   providers: [

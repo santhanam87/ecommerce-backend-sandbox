@@ -6,4 +6,5 @@ export class CreateOrderDto {
   @IsArray()
   items: CreateOrderProductDto[];
   shippingAddress: ShippingAddressDto;
+  paymentId: string;
 }

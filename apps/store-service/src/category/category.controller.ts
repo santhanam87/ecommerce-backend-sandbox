@@ -16,22 +16,22 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
-  async createCategory(@Body() { name }: { name: string }) {
+  createCategory(@Body() { name }: { name: string }) {
     return this.categoryService.createCategory(name);
   }
 
   @Get()
-  async getCategories() {
+  getCategories() {
     return this.categoryService.getCategories();
   }
 
   @Get(':name')
-  async getCategoryByName(@Param('name') name: string) {
+  getCategoryByName(@Param('name') name: string) {
     return this.categoryService.getCategoryByName(name);
   }
 
   @Delete(':name')
-  async deleteCategory(@Param('name') name: string) {
+  deleteCategory(@Param('name') name: string) {
     return this.categoryService.deleteCategory(name);
   }
 }
