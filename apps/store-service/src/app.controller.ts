@@ -1,22 +1,20 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import { AppService } from './app.service';
-import { ClientProxy, MessagePattern } from '@nestjs/microservices';
+import { ClientProxy } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService,
     @Inject('STORE_SERVICE') private readonly client: ClientProxy,
+    @Inject('AWS_SNS_CLIENT') private awsSNSClient: ClientProxy,
   ) {}
-
-  @MessagePattern({ event: 'test' })
-  processTestMessage(data: string) {
-    return data + 'some more information';
-  }
-
-  @Get()
-  getHello(): string {
-    this.client.emit({ event: 'test' }, 'Helloworld');
-    return this.appService.getHello();
+  @Get('test')
+  async processTestMessage() {
+    const message = await lastValueFrom(
+      this.awsSNSClient.emit('test', { message: 'Hello from AWS SNS!' }),
+    );
+    return message;
   }
 }

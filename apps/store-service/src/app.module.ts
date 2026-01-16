@@ -15,6 +15,7 @@ import { OrderModule } from './order/order.module';
 import { CategoryModule } from './category/category.module';
 import { MessageExceptionFilter } from './common/filter/rcp-exception.filter';
 import { CcardModule } from './ccard/ccard.module';
+import AWSClientProxy from './aws-transporter/aws-client-proxy';
 @Module({
   imports: [
     ClientsModule.register([
@@ -23,6 +24,7 @@ import { CcardModule } from './ccard/ccard.module';
         transport: Transport.TCP,
       },
     ]),
+    ClientsModule.register([]),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -37,6 +39,10 @@ import { CcardModule } from './ccard/ccard.module';
   ],
   controllers: [AppController],
   providers: [
+    {
+      provide: 'AWS_SNS_CLIENT',
+      useClass: AWSClientProxy,
+    },
     {
       provide: APP_FILTER,
       useClass: PrismaExceptionFilter,
