@@ -24,14 +24,14 @@ class AWSClientProxy extends ClientProxy {
     return new Promise((resolve) => resolve(null));
   }
 
-  async dispatchEvent({ pattern, data }: ReadPacket<any>): Promise<any> {
+  async dispatchEvent({ pattern: event, data }: ReadPacket<any>): Promise<any> {
     // TODO: Make it more generic
     return await this.snsClient.send(
       new PublishCommand({
-        Message: JSON.stringify(data),
+        Message: JSON.stringify({ ...data, event }),
         TopicArn: this.snsTopicArn,
         MessageAttributes: {
-          event: { DataType: 'String', StringValue: pattern },
+          event: { DataType: 'String', StringValue: event },
         },
       }),
     );

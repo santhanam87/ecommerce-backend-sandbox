@@ -2,12 +2,9 @@ import {
   SQSClient,
   ReceiveMessageCommand,
   DeleteMessageCommand,
-  SendMessageCommand,
 } from '@aws-sdk/client-sqs';
 import { fromIni } from '@aws-sdk/credential-providers';
 import { Server, CustomTransportStrategy } from '@nestjs/microservices';
-import { lastValueFrom } from 'rxjs';
-
 export interface SqsTransporterOptions {
   region?: string;
   queueUrl: string;
@@ -78,7 +75,6 @@ export class AWSTransporter extends Server implements CustomTransportStrategy {
         );
 
         const messages = resp.Messages ?? [];
-        console.info(resp);
         if (messages.length === 0) {
           // nothing to do, lightweight wait to avoid tight loop
           await this.sleep(this.pollingIntervalMs);
@@ -87,9 +83,7 @@ export class AWSTransporter extends Server implements CustomTransportStrategy {
 
         // process messages concurrently, but limit concurrency if desired
         await Promise.all(
-          messages.map((m) =>
-            this.handleMessage(m.Body, m.ReceiptHandle, m.MessageAttributes),
-          ),
+          messages.map((m) => this.handleMessage(m.Body, m.ReceiptHandle)),
         );
       } catch (err) {
         // keep running on errors
@@ -102,7 +96,6 @@ export class AWSTransporter extends Server implements CustomTransportStrategy {
   private async handleMessage(
     body: string | undefined,
     receiptHandle: string | undefined,
-    attributes?: Record<string, any>,
   ) {
     if (!body || !receiptHandle) {
       return;
@@ -112,72 +105,28 @@ export class AWSTransporter extends Server implements CustomTransportStrategy {
     try {
       packet = JSON.parse(body);
     } catch (err) {
-      // invalid message, delete to avoid poisoning
       console.info(err);
       await this.deleteMessage(receiptHandle);
       return;
     }
-
-    const pattern = packet.pattern ?? packet.cmd ?? packet.event;
-    const data = packet.data ?? packet.payload;
-    const replyToFromAttr = attributes?.ReplyTo?.StringValue;
-    const correlationIdFromAttr = attributes?.CorrelationId?.StringValue;
-
-    const replyTo = packet.replyTo ?? replyToFromAttr;
-    const correlationId = packet.correlationId ?? correlationIdFromAttr;
-
+    const pattern = packet.MessageAttributes?.event?.Value;
+    const data = packet.Message;
     if (!pattern) {
-      // nothing to route to, delete message
       await this.deleteMessage(receiptHandle);
       return;
     }
-    console.info(pattern);
     const handler = this.getHandlerByPattern(pattern as string);
     if (!handler) {
-      // no registered handler; delete message and skip
       await this.deleteMessage(receiptHandle);
       return;
     }
 
     try {
-      const result = handler(data);
-      const result$ = this.transformToObservable(result);
-      const value = await lastValueFrom(result$);
-
-      if (replyTo) {
-        await this.sendResponse(replyTo as string, {
-          response: value,
-          correlationId,
-        });
-      }
-
+      await handler(data);
       await this.deleteMessage(receiptHandle);
     } catch (err) {
-      // on handler error: optionally you might push to DLQ or leave message for retry by not deleting.
-      // Here we delete to avoid poison loops. Customize as needed.
       console.error('SqsTransporter handler error:', err);
       await this.deleteMessage(receiptHandle);
-    }
-  }
-
-  private async sendResponse(queueUrl: string, payload: any) {
-    try {
-      await this.client.send(
-        new SendMessageCommand({
-          QueueUrl: queueUrl,
-          MessageBody: JSON.stringify(payload),
-          MessageAttributes: payload.correlationId
-            ? {
-                CorrelationId: {
-                  DataType: 'String',
-                  StringValue: String(payload.correlationId),
-                },
-              }
-            : undefined,
-        }),
-      );
-    } catch (err) {
-      console.error('SqsTransporter sendResponse error', err);
     }
   }
 
