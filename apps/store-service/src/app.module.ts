@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
 import { PrismaExceptionFilter } from './prisma/prisma.exception.filter';
@@ -41,7 +41,11 @@ import AWSClientProxy from './aws-transporter/aws-client-proxy';
   providers: [
     {
       provide: 'AWS_SNS_CLIENT',
-      useClass: AWSClientProxy,
+      useFactory: (config: ConfigService) => {
+        const topicArn = config.get('AWS_SNS_TOPIC_ARN') as string;
+        return new AWSClientProxy(topicArn);
+      },
+      inject: [ConfigService],
     },
     {
       provide: APP_FILTER,

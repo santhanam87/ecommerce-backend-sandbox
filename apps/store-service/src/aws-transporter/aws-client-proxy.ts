@@ -1,17 +1,19 @@
 import { ClientProxy } from '@nestjs/microservices';
 import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 import { ReadPacket, WritePacket } from '@nestjs/microservices/interfaces';
-import { fromIni } from '@aws-sdk/credential-providers';
-
 class AWSClientProxy extends ClientProxy {
   private readonly snsClient: SNSClient;
   private readonly snsTopicArn: string;
-  constructor() {
+  constructor(snsTopicArn: string) {
     super();
     this.snsClient = new SNSClient({
-      credentials: fromIni({ profile: process.env.AWS_PROFILE }),
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+        sessionToken: process.env.AWS_SESSION_TOKEN || '',
+      },
     });
-    this.snsTopicArn = process.env.AWS_SNS_TOPIC_ARN || '';
+    this.snsTopicArn = snsTopicArn;
   }
 
   async connect() {
@@ -41,7 +43,6 @@ class AWSClientProxy extends ClientProxy {
     packet: ReadPacket<any>,
     callback: (packet: WritePacket<any>) => void,
   ) {
-    console.log('message:', packet);
     setTimeout(
       () =>
         callback({

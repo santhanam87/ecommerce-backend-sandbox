@@ -3,7 +3,6 @@ import {
   ReceiveMessageCommand,
   DeleteMessageCommand,
 } from '@aws-sdk/client-sqs';
-import { fromIni } from '@aws-sdk/credential-providers';
 import { Server, CustomTransportStrategy } from '@nestjs/microservices';
 export interface SqsTransporterOptions {
   region?: string;
@@ -30,7 +29,11 @@ export class AWSTransporter extends Server implements CustomTransportStrategy {
     this.client =
       options.sqsClient ??
       new SQSClient({
-        credentials: fromIni({ profile: process.env.AWS_PROFILE }),
+        credentials: {
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+          sessionToken: process.env.AWS_SESSION_TOKEN || '',
+        },
       });
     this.queueUrl = options.queueUrl;
     this.waitTimeSeconds = options.waitTimeSeconds ?? 20;
