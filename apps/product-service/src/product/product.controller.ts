@@ -7,7 +7,6 @@ import {
   Param,
   Patch,
   Post,
-  Req,
   UseFilters,
   UseGuards,
 } from '@nestjs/common';
@@ -41,32 +40,28 @@ export class ProductController {
   @UseFilters(MessageExceptionFilter)
   @Post()
   async createProduct(
-    @Req() request: Request,
-    @Body() payload: CreateProductDto,
+    @Body() { availableQuantity = 0, ...payload }: CreateProductDto,
   ) {
     const product = await this.productService.createProduct(payload);
     const { id: productId } = product;
     this.productMessageClient.emit(ProductEventPatterns.ProductCreated, {
       productId,
+      availableQuantity,
     });
     return product;
   }
 
-  @EventPattern(ProductEventPatterns.ProductCreated)
-  handleProductCreated(data) {
-    console.info('Product created:', data);
-  }
-
-  // @MessagePattern({ event: 'product_inventory_created' })
+  @EventPattern(ProductEventPatterns.InventoryCreateSuccess)
   async updateProductStatus(data: { productId: string }) {
+    console.info('Inventory created successfully for product:', data.productId);
     await this.productService.updateProduct(data.productId, {
       status: 'ACTIVE',
     });
   }
 
-  // @MessagePattern({ event: 'product_inventory_creation_failed' })
+  @EventPattern(ProductEventPatterns.InventoryCreateFailed)
   async handleInventoryCreationFailure(data: { productId: string }) {
-    console.info('inventory creation failed for product:', data.productId);
+    console.error('Inventory creation failed for product:', data.productId);
     await this.productService.updateProduct(data.productId, {
       status: 'FAILED',
     });

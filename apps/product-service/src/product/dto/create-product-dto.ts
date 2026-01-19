@@ -14,4 +14,6 @@ export class CreateProductDto {
   description?: string;
   @IsString()
   status?: ProductStatus;
+  @IsNumber()
+  availableQuantity?: number;
 }

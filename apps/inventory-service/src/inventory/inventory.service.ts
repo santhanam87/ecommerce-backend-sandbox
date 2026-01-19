@@ -7,7 +7,7 @@ export class InventoryService {
   constructor(private readonly prisma: PrismaService) {}
   async createInventoryItem(data: CreateInventoryDto) {
     return await this.prisma.inventory.create({
-      data: { ...data, availableQuantity: 0 },
+      data,
     });
   }
   async getInventoryByProductId(productId: string) {

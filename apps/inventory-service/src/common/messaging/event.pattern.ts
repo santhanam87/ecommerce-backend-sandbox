@@ -1,3 +1,5 @@
 export const Patterns = {
-  OrderCreated: 'order.created',
+  InventoryCreateSuccess: 'inventory.create.success',
+  InventoryCreateFailed: 'inventory.create.failed',
+  ProductCreated: 'product.created',
 } as const;

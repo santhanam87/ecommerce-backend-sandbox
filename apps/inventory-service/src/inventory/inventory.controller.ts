@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Inject,
   // Inject,
   Param,
   Post,
@@ -9,37 +10,36 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
 import { InventoryService } from './inventory.service';
-// import { CreateInventoryDto } from './dto/inventory-create.dto';
-// import { ClientProxy, MessagePattern } from '@nestjs/microservices';
-// import { type OrderItem } from 'generated/prisma/browser';
+import { CreateInventoryDto } from './dto/inventory-create.dto';
+import { ClientProxy, MessagePattern } from '@nestjs/microservices';
+import { Patterns } from 'src/common/messaging/event.pattern';
 
 @UseGuards(JwtAuthGuard)
 @Controller('inventory')
 export class InventoryController {
   constructor(
     private readonly inventoryService: InventoryService,
-    // @Inject('STORE_SERVICE') private readonly messageClient: ClientProxy,
+    @Inject('INVENTORY_MESSAGE_CLIENT')
+    private readonly inventoryMessageClient: ClientProxy,
   ) {}
 
-  // @MessagePattern({ event: 'product_created' })
-  // async createInventory(createInventoryDto: CreateInventoryDto) {
-  //   console.info('product created received in inventory');
-  //   try {
-  //     const inventroy =
-  //       await this.inventoryService.createInventoryItem(createInventoryDto);
-  //     this.messageClient.emit(
-  //       { event: 'product_inventory_created' },
-  //       { productId: createInventoryDto.productId },
-  //     );
-  //     return inventroy;
-  //   } catch (err) {
-  //     this.messageClient.emit(
-  //       { event: 'product_inventory_creation_failed' },
-  //       { productId: createInventoryDto.productId },
-  //     );
-  //     console.error('Error creating inventory item:', err);
-  //   }
-  // }
+  @MessagePattern(Patterns.ProductCreated)
+  async createInventory(createInventoryDto: CreateInventoryDto) {
+    console.info('create inventory', createInventoryDto);
+    try {
+      const inventory =
+        await this.inventoryService.createInventoryItem(createInventoryDto);
+      this.inventoryMessageClient.emit(Patterns.InventoryCreateSuccess, {
+        productId: createInventoryDto.productId,
+      });
+      return inventory;
+    } catch (err) {
+      this.inventoryMessageClient.emit(Patterns.InventoryCreateFailed, {
+        productId: createInventoryDto.productId,
+      });
+      console.error('Error creating inventory item:', err);
+    }
+  }
 
   @Get(':productId')
   getInventory(@Param('productId') productId: string) {
