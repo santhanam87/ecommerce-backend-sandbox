@@ -1,5 +1,10 @@
 ###
-GET http://localhost:3000
+POST http://localhost:3000/test
+Content-Type: application/json
+
+{
+  "orderId": "123456"
+}
 
 ###
 POST http://localhost:3000/users

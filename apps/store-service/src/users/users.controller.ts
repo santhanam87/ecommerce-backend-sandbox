@@ -14,6 +14,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserResponseDto } from './dto/user-response.dto';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
 import { Public } from 'src/common/decorator/public.decorator';
+import { EventPattern } from '@nestjs/microservices';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users')
@@ -48,5 +49,10 @@ export class UsersController {
   @Delete(':id')
   public deleteUserById(@Param('id') id: string) {
     return this.usersService.deleteUserById(id);
+  }
+
+  @EventPattern('order-created')
+  handleOrderCreatedEvent(data: any) {
+    console.log('Received order-created event on User:', data);
   }
 }
