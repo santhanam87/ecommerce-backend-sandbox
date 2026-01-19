@@ -1,3 +1,3 @@
-export const Patterns = {
-  OrderCreated: 'order.created',
+export const ProductEventPatterns = {
+  ProductCreated: 'product.created',
 } as const;

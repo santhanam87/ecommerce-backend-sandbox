@@ -6,7 +6,6 @@ interface CreateEventOptions<T> {
   source: string;
   data: T;
   correlationId?: string;
-  target?: EventTarget[];
 }
 
 export function createEvent<T>(
@@ -18,7 +17,6 @@ export function createEvent<T>(
     source: options.source,
     timestamp: new Date().toISOString(),
     correlationId: options.correlationId,
-    target: options.target,
     data: options.data,
   };
 }

@@ -1,19 +1,16 @@
 import { ClientProxy } from '@nestjs/microservices';
 import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 import { ReadPacket, WritePacket } from '@nestjs/microservices/interfaces';
+import { EventEnvelope } from './event-envelope';
+// import { fromIni } from '@aws-sdk/credential-providers';
+
 class AWSClientProxy extends ClientProxy {
   private readonly snsClient: SNSClient;
   private readonly snsTopicArn: string;
-  constructor(snsTopicArn: string) {
+  constructor(topicArn: string) {
     super();
-    this.snsClient = new SNSClient({
-      credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
-        sessionToken: process.env.AWS_SESSION_TOKEN || '',
-      },
-    });
-    this.snsTopicArn = snsTopicArn;
+    this.snsClient = new SNSClient();
+    this.snsTopicArn = topicArn;
   }
 
   async connect() {
@@ -26,17 +23,23 @@ class AWSClientProxy extends ClientProxy {
     return new Promise((resolve) => resolve(null));
   }
 
-  async dispatchEvent({ pattern: event, data }: ReadPacket<any>): Promise<any> {
-    // TODO: Make it more generic
-    return await this.snsClient.send(
-      new PublishCommand({
-        Message: JSON.stringify({ ...data, event }),
-        TopicArn: this.snsTopicArn,
-        MessageAttributes: {
-          event: { DataType: 'String', StringValue: event },
-        },
-      }),
-    );
+  async dispatchEvent({
+    pattern,
+    data,
+  }: ReadPacket<EventEnvelope<any>>): Promise<any> {
+    try {
+      const publishResponse = await this.snsClient.send(
+        new PublishCommand({
+          Message: JSON.stringify({ ...data, pattern }),
+          TopicArn: this.snsTopicArn,
+        }),
+      );
+      console.info(publishResponse.MessageId);
+      return publishResponse.MessageId;
+    } catch (error) {
+      console.error('Error publishing SNS message:', error);
+      throw error;
+    }
   }
 
   publish(

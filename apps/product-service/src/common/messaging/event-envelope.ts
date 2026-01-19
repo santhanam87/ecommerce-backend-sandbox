@@ -17,12 +17,6 @@ export interface EventEnvelope<T = unknown> {
   /** Saga / business correlation (orderId, etc.) */
   correlationId?: string;
 
-  /**
-   * Intended consumers (training-only).
-   * If undefined → broadcast
-   */
-  target?: EventTarget[];
-
   /** Business payload */
   data: T;
 }

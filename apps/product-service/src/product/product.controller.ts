@@ -3,7 +3,7 @@ import {
   Controller,
   Delete,
   Get,
-  // Inject,
+  Inject,
   Param,
   Patch,
   Post,
@@ -14,16 +14,18 @@ import {
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product-dto';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
-// import { ClientProxy } from '@nestjs/microservices';
 import { type Request } from 'express';
 import { MessageExceptionFilter } from 'src/common/filter/rcp-exception.filter';
+import { ClientProxy, EventPattern } from '@nestjs/microservices';
+import { ProductEventPatterns } from 'src/common/messaging/event.pattern';
 
 @UseGuards(JwtAuthGuard)
 @Controller('product')
 export class ProductController {
   constructor(
     private readonly productService: ProductService,
-    // @Inject('STORE_SERVICE') private readonly messageClient: ClientProxy,
+    @Inject('PRODUCT_MESSAGE_CLIENT')
+    private readonly productMessageClient: ClientProxy,
   ) {}
 
   @Get()
@@ -43,9 +45,16 @@ export class ProductController {
     @Body() payload: CreateProductDto,
   ) {
     const product = await this.productService.createProduct(payload);
-    // const { id: productId } = product;
-    // this.messageClient.emit({ event: 'product_created' }, { productId });
+    const { id: productId } = product;
+    this.productMessageClient.emit(ProductEventPatterns.ProductCreated, {
+      productId,
+    });
     return product;
+  }
+
+  @EventPattern(ProductEventPatterns.ProductCreated)
+  handleProductCreated(data) {
+    console.info('Product created:', data);
   }
 
   // @MessagePattern({ event: 'product_inventory_created' })
