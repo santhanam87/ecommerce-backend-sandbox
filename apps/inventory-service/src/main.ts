@@ -7,7 +7,12 @@ async function bootstrap() {
   const webApp = await NestFactory.create(AppModule);
   webApp.connectMicroservice<MicroserviceOptions>({
     strategy: new AWSTransporter({
-      queueUrl: process.env.AWS_SQS_QUEUE_URL || '',
+      queueUrl: process.env.AWS_PRODUCT_INVENTORY_QUEUE_URL || '',
+    }),
+  });
+  webApp.connectMicroservice<MicroserviceOptions>({
+    strategy: new AWSTransporter({
+      queueUrl: process.env.AWS_ORDER_INVENTORY_QUEUE_URL || '',
     }),
   });
   await webApp.startAllMicroservices();
@@ -16,7 +21,7 @@ async function bootstrap() {
 }
 bootstrap()
   .then((url) => {
-    console.log(`User service is running on ${url}`);
+    console.log(`Inventory service is running on ${url}`);
   })
   .catch((err) => {
     console.error('Error starting user service:', err);

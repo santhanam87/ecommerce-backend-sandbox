@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Inject,
-  // Inject,
   Param,
   Post,
   UseGuards,
@@ -11,8 +10,13 @@ import {
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
 import { InventoryService } from './inventory.service';
 import { CreateInventoryDto } from './dto/inventory-create.dto';
-import { ClientProxy, MessagePattern } from '@nestjs/microservices';
+import { ClientProxy, EventPattern } from '@nestjs/microservices';
 import { Patterns } from 'src/common/messaging/event.pattern';
+
+type OrderItem = {
+  productId: string;
+  quantity: number;
+};
 
 @UseGuards(JwtAuthGuard)
 @Controller('inventory')
@@ -23,7 +27,7 @@ export class InventoryController {
     private readonly inventoryMessageClient: ClientProxy,
   ) {}
 
-  @MessagePattern(Patterns.ProductCreated)
+  @EventPattern(Patterns.ProductCreated)
   async createInventory(createInventoryDto: CreateInventoryDto) {
     console.info('create inventory', createInventoryDto);
     try {
@@ -51,22 +55,22 @@ export class InventoryController {
     return this.inventoryService.adjustStock(body.productId, body.quantity);
   }
 
-  // @MessagePattern({ event: 'order_created' })
-  // public async processPayment(order: { items: OrderItem[]; id: string }) {
-  //   console.info('order created received in inventory:', order.id);
-  //   try {
-  //     const itemPromises = order.items.map(async (item) => {
-  //       return this.inventoryService.adjustStock(
-  //         item.productId as string,
-  //         item.quantity as number,
-  //       );
-  //     });
-  //     console.info(itemPromises);
-  //     await Promise.all(itemPromises);
-  //     this.messageClient.emit({ event: 'stock_reserved' }, order.id);
-  //   } catch (err) {
-  //     this.messageClient.emit({ event: 'stock_reserved_failed' }, order.id);
-  //     throw err;
-  //   }
-  // }
+  @EventPattern(Patterns.OrderCreated)
+  public async processPayment(order: { items: OrderItem[]; id: string }) {
+    console.info('order created received in inventory:', order.id);
+    try {
+      const itemPromises = order.items.map(async (item) => {
+        return this.inventoryService.adjustStock(item.productId, item.quantity);
+      });
+      await Promise.all(itemPromises);
+      this.inventoryMessageClient.emit(Patterns.InventoryReserved, {
+        id: order.id,
+      });
+    } catch (err) {
+      this.inventoryMessageClient.emit(Patterns.InventoryReservedFailed, {
+        id: order.id,
+      });
+      throw err;
+    }
+  }
 }

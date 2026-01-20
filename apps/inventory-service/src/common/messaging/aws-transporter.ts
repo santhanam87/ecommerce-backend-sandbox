@@ -70,6 +70,7 @@ export class AWSTransporter extends Server implements CustomTransportStrategy {
         );
 
         const messages = resp.Messages ?? [];
+        console.info(messages);
         if (messages.length === 0) {
           // nothing to do, lightweight wait to avoid tight loop
           await this.sleep(this.pollingIntervalMs);
@@ -105,6 +106,7 @@ export class AWSTransporter extends Server implements CustomTransportStrategy {
       return;
     }
     const { pattern, ...data } = JSON.parse(packet.Message);
+    console.info(pattern);
     if (!pattern) {
       await this.deleteMessage(receiptHandle);
       return;

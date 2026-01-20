@@ -13,7 +13,6 @@ import {
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product-dto';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
-import { type Request } from 'express';
 import { MessageExceptionFilter } from 'src/common/filter/rcp-exception.filter';
 import { ClientProxy, EventPattern } from '@nestjs/microservices';
 import { ProductEventPatterns } from 'src/common/messaging/event.pattern';

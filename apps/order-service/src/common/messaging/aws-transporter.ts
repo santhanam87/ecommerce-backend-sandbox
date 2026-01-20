@@ -26,15 +26,7 @@ export class AWSTransporter extends Server implements CustomTransportStrategy {
 
   constructor(private readonly options: SqsTransporterOptions) {
     super();
-    this.client =
-      options.sqsClient ??
-      new SQSClient({
-        credentials: {
-          accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
-          sessionToken: process.env.AWS_SESSION_TOKEN || '',
-        },
-      });
+    this.client = options.sqsClient ?? new SQSClient();
     this.queueUrl = options.queueUrl;
     this.waitTimeSeconds = options.waitTimeSeconds ?? 20;
     this.visibilityTimeout = options.visibilityTimeout;
@@ -112,8 +104,7 @@ export class AWSTransporter extends Server implements CustomTransportStrategy {
       await this.deleteMessage(receiptHandle);
       return;
     }
-    const pattern = packet.MessageAttributes?.event?.Value;
-    const data = packet.Message;
+    const { pattern, ...data } = JSON.parse(packet.Message);
     if (!pattern) {
       await this.deleteMessage(receiptHandle);
       return;
