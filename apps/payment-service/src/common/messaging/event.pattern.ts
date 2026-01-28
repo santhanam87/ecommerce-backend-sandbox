@@ -1,5 +1,5 @@
 export const Patterns = {
   OrderCreated: 'order.create.success',
-  InventoryReserved: 'inventory.reserve.success',
-  InventoryReserveFailed: 'inventory.reserve.failed',
+  PaymentAuthorized: 'payment.authorization.success',
+  PaymentAutorizationFailed: 'payment.authorization.failed',
 } as const;

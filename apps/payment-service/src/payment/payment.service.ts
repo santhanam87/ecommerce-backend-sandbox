@@ -21,4 +21,9 @@ export class PaymentService {
       where: { id },
     });
   }
+  async getPaymentsByUserId(userId: string) {
+    return await this.prisma.payment.findMany({
+      where: { userId },
+    });
+  }
 }

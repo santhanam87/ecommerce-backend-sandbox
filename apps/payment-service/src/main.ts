@@ -11,6 +11,7 @@ async function bootstrap() {
       queueUrl: process.env.AWS_PAYMENT_PROCESS_ORDER_QUEUE_URL || '',
     }),
   });
+  await webApp.startAllMicroservices();
   await webApp.listen(process.env.PORT || 3000);
 }
 bootstrap();

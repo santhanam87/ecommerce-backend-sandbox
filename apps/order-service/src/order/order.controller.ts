@@ -40,18 +40,20 @@ export class OrderController {
     await this.orderService.updateOrderStockStatus(orderId, false);
     await this.orderService.updateOrderStatus(orderId, OrderStatus.FAILED);
   }
-  // @MessagePattern({ event: 'payment_authorized' })
-  public async confirmOrderPayment(orderId: string) {
-    await this.orderService.updateOrderPaymentStatus(orderId, true);
-    const isOrderComplete =
-      await this.orderService.checkOrderCompletion(orderId);
+  @EventPattern(Patterns.PaymentAuthorized)
+  public async confirmOrderPayment(order) {
+    console.info('payment authorized.....', order);
+    await this.orderService.updateOrderPaymentStatus(order.orderId, true);
+    const isOrderComplete = await this.orderService.checkOrderCompletion(
+      order.orderId,
+    );
     if (isOrderComplete) {
       console.info('order complete from payment authorized');
       // this.messageClient.emit({ event: 'order_complete' }, orderId);
     }
   }
-  // @MessagePattern({ event: 'payment_authorization_failed' })
-  public async failOrderPayment(orderId: string) {
+  @EventPattern(Patterns.PaymentAuthorizationFailed)
+  public async failOrderPayment({ orderId }: { orderId: string }) {
     await this.orderService.updateOrderPaymentStatus(orderId, false);
     await this.orderService.updateOrderStatus(orderId, OrderStatus.FAILED);
   }
