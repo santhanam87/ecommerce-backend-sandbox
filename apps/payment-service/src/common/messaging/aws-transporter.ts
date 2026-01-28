@@ -75,7 +75,7 @@ export class AWSTransporter extends Server implements CustomTransportStrategy {
           await this.sleep(this.pollingIntervalMs);
           continue;
         }
-        console.info(messages);
+
         // process messages concurrently, but limit concurrency if desired
         await Promise.all(
           messages.map((m) => this.handleMessage(m.Body, m.ReceiptHandle)),

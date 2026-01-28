@@ -1,16 +1,18 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Inject, Post, UseGuards } from '@nestjs/common';
 import { CreateOrderDto } from './dto/order-create.dto';
 import { OrderService, type User } from './order.service';
-// import { ClientProxy, MessagePattern } from '@nestjs/microservices';
+import { ClientProxy, EventPattern } from '@nestjs/microservices';
 import { OrderStatus } from 'generated/prisma/client';
 import { GetUser } from 'src/common/decorator/user.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
+import { Patterns } from 'src/common/messaging/event.pattern';
 @UseGuards(JwtAuthGuard)
 @Controller('order')
 export class OrderController {
   constructor(
     private readonly orderService: OrderService,
-    // @Inject('STORE_SERVICE') private readonly messageClient: ClientProxy,
+    @Inject('ORDER_MESSAGE_CLIENT')
+    private readonly orderMessageClient: ClientProxy,
   ) {}
   @Post()
   public async createOrder(
@@ -18,11 +20,11 @@ export class OrderController {
     @Body() createOrderPayload: CreateOrderDto,
   ) {
     const order = await this.orderService.createOrder(user, createOrderPayload);
-    // this.messageClient.emit({ event: 'order_created' }, order);
+    this.orderMessageClient.emit(Patterns.OrderCreated, order);
     return order;
   }
-  // @MessagePattern({ event: 'stock_reserved' })
-  public async processPayment(orderId: string) {
+  @EventPattern(Patterns.InventoryReserved)
+  public async processPayment({ id: orderId }: { id: string }) {
     console.info('stock reserved for order:', orderId);
     await this.orderService.updateOrderStockStatus(orderId, true);
     const isOrderComplete =
@@ -32,23 +34,26 @@ export class OrderController {
       // this.messageClient.emit({ event: 'order_complete' }, orderId);
     }
   }
-  // @MessagePattern({ event: 'stock_reserved_failed' })
-  public async updateOrderStatus(orderId: string) {
+  @EventPattern(Patterns.InventoryReserveFailed)
+  public async updateOrderStatus({ id: orderId }: { id: string }) {
+    console.error('stock reservation failed for order:', orderId);
     await this.orderService.updateOrderStockStatus(orderId, false);
     await this.orderService.updateOrderStatus(orderId, OrderStatus.FAILED);
   }
-  // @MessagePattern({ event: 'payment_authorized' })
-  public async confirmOrderPayment(orderId: string) {
-    await this.orderService.updateOrderPaymentStatus(orderId, true);
-    const isOrderComplete =
-      await this.orderService.checkOrderCompletion(orderId);
+  @EventPattern(Patterns.PaymentAuthorized)
+  public async confirmOrderPayment(order) {
+    console.info('payment authorized.....', order);
+    await this.orderService.updateOrderPaymentStatus(order.orderId, true);
+    const isOrderComplete = await this.orderService.checkOrderCompletion(
+      order.orderId,
+    );
     if (isOrderComplete) {
       console.info('order complete from payment authorized');
       // this.messageClient.emit({ event: 'order_complete' }, orderId);
     }
   }
-  // @MessagePattern({ event: 'payment_authorization_failed' })
-  public async failOrderPayment(orderId: string) {
+  @EventPattern(Patterns.PaymentAuthorizationFailed)
+  public async failOrderPayment({ orderId }: { orderId: string }) {
     await this.orderService.updateOrderPaymentStatus(orderId, false);
     await this.orderService.updateOrderStatus(orderId, OrderStatus.FAILED);
   }

@@ -7,7 +7,8 @@ import { AuthModule } from './auth/auth.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
 import { MessageExceptionFilter } from './common/filter/rcp-exception.filter';
-import { OrderModule } from './order/order.module';
+import { PaymentModule } from './payment/payment.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { OrderModule } from './order/order.module';
     }),
     PrismaModule,
     AuthModule,
-    OrderModule,
+    PaymentModule,
+    TransactionModule,
   ],
   controllers: [AppController],
   providers: [

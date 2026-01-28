@@ -33,7 +33,10 @@ class AWSClientProxy extends ClientProxy {
           TopicArn: this.snsTopicArn,
         }),
       );
-      console.info(publishResponse.MessageId);
+      console.info(publishResponse.MessageId, {
+        Message: JSON.stringify({ ...data, pattern }),
+        TopicArn: this.snsTopicArn,
+      });
       return publishResponse.MessageId;
     } catch (error) {
       console.error('Error publishing SNS message:', error);
