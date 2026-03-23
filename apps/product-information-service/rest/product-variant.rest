@@ -1,0 +1,71 @@
+@baseUrl = http://localhost:3003
+@contentType = application/json
+
+###
+# -----------------------------
+# PRODUCT CRUD
+# -----------------------------
+
+### Create product
+POST {{baseUrl}}/products
+Content-Type: {{contentType}}
+
+{
+  "name": "Running Shoe",
+  "description": "Lightweight running shoe with breathable upper"
+}
+
+### Get all products
+GET {{baseUrl}}/products
+
+### Get product by id
+# Replace with a real UUID from create/list response
+@productId = cb3ab1a5-2cd3-4b81-9aaa-2d40d3c8e0f3
+GET {{baseUrl}}/products/{{productId}}
+
+### Update product
+PATCH {{baseUrl}}/products/{{productId}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Running Shoe Pro",
+  "description": "Updated description"
+}
+
+### Delete product
+DELETE {{baseUrl}}/products/{{productId}}
+
+###
+# -----------------------------
+# VARIANT CRUD
+# -----------------------------
+
+### Create variant
+POST {{baseUrl}}/variants
+Content-Type: {{contentType}}
+
+{
+  "product_id": "{{productId}}",
+  "sku": "RUN-SHOE-42-BLK",
+  "price": 129.99
+}
+
+### Get all variants
+GET {{baseUrl}}/variants
+
+### Get variant by id
+# Replace with a real UUID from create/list response
+@variantId = 22222222-2222-4222-8222-222222222222
+GET {{baseUrl}}/variants/{{variantId}}
+
+### Update variant
+PATCH {{baseUrl}}/variants/{{variantId}}
+Content-Type: {{contentType}}
+
+{
+  "sku": "RUN-SHOE-42-BLK-V2",
+  "price": 139.99
+}
+
+### Delete variant
+DELETE {{baseUrl}}/variants/{{variantId}}
