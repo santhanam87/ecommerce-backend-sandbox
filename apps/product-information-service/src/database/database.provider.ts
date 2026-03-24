@@ -10,7 +10,7 @@ import { ProductPropertyKey } from '../product-property-key/entities/product-pro
 import { ProductPropertyKeyValueMapping } from '../product-property-key-value-mapping/entities/product-property-key-value-mapping.entity';
 import { ProductPropertyValue } from '../product-property-value/entities/product-property-value.entity';
 import { Product } from '../product/entities/product.entity';
-import { Variant } from '../variant/entities/variant.entity';
+import { ProductVariant } from '../product-variant/entities/product-variant.entity';
 
 export const databaseProviders = [
   {
@@ -34,7 +34,7 @@ export const databaseProviders = [
           ProductPropertyKey,
           ProductPropertyValue,
           Product,
-          Variant,
+          ProductVariant,
           ProductAttributeKeyValueMapping,
           ProductPropertyKeyValueMapping,
         ],

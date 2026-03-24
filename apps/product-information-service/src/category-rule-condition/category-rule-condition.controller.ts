@@ -8,11 +8,19 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CategoryRuleConditionService } from './category-rule-condition.service';
 import { CreateCategoryRuleConditionDto } from './dto/create-category-rule-condition.dto';
 import { UpdateCategoryRuleConditionDto } from './dto/update-category-rule-condition.dto';
 import { CategoryRuleCondition } from './entities/category-rule-condition.entity';
 
+@ApiTags('category-rule-conditions')
 @Controller('category-rule-conditions')
 export class CategoryRuleConditionController {
   constructor(
@@ -20,6 +28,8 @@ export class CategoryRuleConditionController {
   ) {}
 
   @Post()
+  @ApiBody({ type: CreateCategoryRuleConditionDto })
+  @ApiCreatedResponse({ type: CategoryRuleCondition })
   create(
     @Body() createCategoryRuleConditionDto: CreateCategoryRuleConditionDto,
   ): Promise<CategoryRuleCondition> {
@@ -29,11 +39,13 @@ export class CategoryRuleConditionController {
   }
 
   @Get()
+  @ApiOkResponse({ type: CategoryRuleCondition, isArray: true })
   findAll(): Promise<CategoryRuleCondition[]> {
     return this.categoryRuleConditionService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: CategoryRuleCondition })
   findOne(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<CategoryRuleCondition> {
@@ -41,6 +53,8 @@ export class CategoryRuleConditionController {
   }
 
   @Patch(':id')
+  @ApiBody({ type: UpdateCategoryRuleConditionDto })
+  @ApiOkResponse({ type: CategoryRuleCondition })
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateCategoryRuleConditionDto: UpdateCategoryRuleConditionDto,
@@ -52,6 +66,7 @@ export class CategoryRuleConditionController {
   }
 
   @Delete(':id')
+  @ApiNoContentResponse()
   remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     return this.categoryRuleConditionService.remove(id);
   }

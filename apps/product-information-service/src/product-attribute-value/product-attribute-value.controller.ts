@@ -8,11 +8,19 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateProductAttributeValueDto } from './dto/create-product-attribute-value.dto';
 import { UpdateProductAttributeValueDto } from './dto/update-product-attribute-value.dto';
 import { ProductAttributeValue } from './entities/product-attribute-value.entity';
 import { ProductAttributeValueService } from './product-attribute-value.service';
 
+@ApiTags('product-attribute-values')
 @Controller('product-attribute-values')
 export class ProductAttributeValueController {
   constructor(
@@ -20,6 +28,8 @@ export class ProductAttributeValueController {
   ) {}
 
   @Post()
+  @ApiBody({ type: CreateProductAttributeValueDto })
+  @ApiCreatedResponse({ type: ProductAttributeValue })
   create(
     @Body() createProductAttributeValueDto: CreateProductAttributeValueDto,
   ): Promise<ProductAttributeValue> {
@@ -29,11 +39,13 @@ export class ProductAttributeValueController {
   }
 
   @Get()
+  @ApiOkResponse({ type: ProductAttributeValue, isArray: true })
   findAll(): Promise<ProductAttributeValue[]> {
     return this.productAttributeValueService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: ProductAttributeValue })
   findOne(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<ProductAttributeValue> {
@@ -41,6 +53,8 @@ export class ProductAttributeValueController {
   }
 
   @Patch(':id')
+  @ApiBody({ type: UpdateProductAttributeValueDto })
+  @ApiOkResponse({ type: ProductAttributeValue })
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateProductAttributeValueDto: UpdateProductAttributeValueDto,
@@ -52,6 +66,7 @@ export class ProductAttributeValueController {
   }
 
   @Delete(':id')
+  @ApiNoContentResponse()
   remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     return this.productAttributeValueService.remove(id);
   }

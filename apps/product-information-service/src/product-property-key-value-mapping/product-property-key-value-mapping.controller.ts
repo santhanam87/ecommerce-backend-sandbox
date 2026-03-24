@@ -8,11 +8,19 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateProductPropertyKeyValueMappingDto } from './dto/create-product-property-key-value-mapping.dto';
 import { UpdateProductPropertyKeyValueMappingDto } from './dto/update-product-property-key-value-mapping.dto';
 import { ProductPropertyKeyValueMapping } from './entities/product-property-key-value-mapping.entity';
 import { ProductPropertyKeyValueMappingService } from './product-property-key-value-mapping.service';
 
+@ApiTags('product-property-key-value-mappings')
 @Controller('product-property-key-value-mappings')
 export class ProductPropertyKeyValueMappingController {
   constructor(
@@ -20,6 +28,8 @@ export class ProductPropertyKeyValueMappingController {
   ) {}
 
   @Post()
+  @ApiBody({ type: CreateProductPropertyKeyValueMappingDto })
+  @ApiCreatedResponse({ type: ProductPropertyKeyValueMapping })
   create(
     @Body()
     createProductPropertyKeyValueMappingDto: CreateProductPropertyKeyValueMappingDto,
@@ -30,11 +40,13 @@ export class ProductPropertyKeyValueMappingController {
   }
 
   @Get()
+  @ApiOkResponse({ type: ProductPropertyKeyValueMapping, isArray: true })
   findAll(): Promise<ProductPropertyKeyValueMapping[]> {
     return this.productPropertyKeyValueMappingService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: ProductPropertyKeyValueMapping })
   findOne(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<ProductPropertyKeyValueMapping> {
@@ -42,6 +54,8 @@ export class ProductPropertyKeyValueMappingController {
   }
 
   @Patch(':id')
+  @ApiBody({ type: UpdateProductPropertyKeyValueMappingDto })
+  @ApiOkResponse({ type: ProductPropertyKeyValueMapping })
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body()
@@ -54,6 +68,7 @@ export class ProductPropertyKeyValueMappingController {
   }
 
   @Delete(':id')
+  @ApiNoContentResponse()
   remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     return this.productPropertyKeyValueMappingService.remove(id);
   }

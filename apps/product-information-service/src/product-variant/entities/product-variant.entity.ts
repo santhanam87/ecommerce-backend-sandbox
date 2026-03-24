@@ -15,12 +15,12 @@ import { ProductAttributeKeyValueMapping } from '../../product-attribute-key-val
 import { ProductPropertyKeyValueMapping } from '../../product-property-key-value-mapping/entities/product-property-key-value-mapping.entity';
 
 @Table({
-  tableName: 'variants',
+  tableName: 'product_variants',
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at',
 })
-export class Variant extends Model {
+export class ProductVariant extends Model {
   @PrimaryKey
   @Column({
     type: DataType.UUID,

@@ -17,7 +17,7 @@ import { ProductPropertyKeyModule } from './product-property-key/product-propert
 import { ProductPropertyKeyValueMappingModule } from './product-property-key-value-mapping/product-property-key-value-mapping.module';
 import { ProductPropertyValueModule } from './product-property-value/product-property-value.module';
 import { ProductModule } from './product/product.module';
-import { VariantModule } from './variant/variant.module';
+import { ProductVariantModule } from './product-variant/product-variant.module';
 
 @Module({
   imports: [
@@ -39,7 +39,7 @@ import { VariantModule } from './variant/variant.module';
     ProductPropertyKeyValueMappingModule,
     ProductPropertyValueModule,
     ProductModule,
-    VariantModule,
+    ProductVariantModule,
     AuthModule,
   ],
   controllers: [AppController],

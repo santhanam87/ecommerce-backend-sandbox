@@ -8,7 +8,7 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { Variant } from '../../variant/entities/variant.entity';
+import { ProductVariant } from '../../product-variant/entities/product-variant.entity';
 
 @Table({
   tableName: 'products',
@@ -36,8 +36,8 @@ export class Product extends Model {
   })
   declare description: string;
 
-  @HasMany(() => Variant)
-  declare variants: Variant[];
+  @HasMany(() => ProductVariant)
+  declare variants: ProductVariant[];
 
   @CreatedAt
   @Column({

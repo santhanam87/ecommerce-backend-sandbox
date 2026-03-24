@@ -8,11 +8,19 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateProductPropertyValueDto } from './dto/create-product-property-value.dto';
 import { UpdateProductPropertyValueDto } from './dto/update-product-property-value.dto';
 import { ProductPropertyValue } from './entities/product-property-value.entity';
 import { ProductPropertyValueService } from './product-property-value.service';
 
+@ApiTags('product-property-values')
 @Controller('product-property-values')
 export class ProductPropertyValueController {
   constructor(
@@ -20,6 +28,8 @@ export class ProductPropertyValueController {
   ) {}
 
   @Post()
+  @ApiBody({ type: CreateProductPropertyValueDto })
+  @ApiCreatedResponse({ type: ProductPropertyValue })
   create(
     @Body() createProductPropertyValueDto: CreateProductPropertyValueDto,
   ): Promise<ProductPropertyValue> {
@@ -29,11 +39,13 @@ export class ProductPropertyValueController {
   }
 
   @Get()
+  @ApiOkResponse({ type: ProductPropertyValue, isArray: true })
   findAll(): Promise<ProductPropertyValue[]> {
     return this.productPropertyValueService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: ProductPropertyValue })
   findOne(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<ProductPropertyValue> {
@@ -41,6 +53,8 @@ export class ProductPropertyValueController {
   }
 
   @Patch(':id')
+  @ApiBody({ type: UpdateProductPropertyValueDto })
+  @ApiOkResponse({ type: ProductPropertyValue })
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateProductPropertyValueDto: UpdateProductPropertyValueDto,
@@ -52,6 +66,7 @@ export class ProductPropertyValueController {
   }
 
   @Delete(':id')
+  @ApiNoContentResponse()
   remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     return this.productPropertyValueService.remove(id);
   }

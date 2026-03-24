@@ -8,11 +8,19 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateProductAttributeKeyValueMappingDto } from './dto/create-product-attribute-key-value-mapping.dto';
 import { UpdateProductAttributeKeyValueMappingDto } from './dto/update-product-attribute-key-value-mapping.dto';
 import { ProductAttributeKeyValueMapping } from './entities/product-attribute-key-value-mapping.entity';
 import { ProductAttributeKeyValueMappingService } from './product-attribute-key-value-mapping.service';
 
+@ApiTags('product-attribute-key-value-mappings')
 @Controller('product-attribute-key-value-mappings')
 export class ProductAttributeKeyValueMappingController {
   constructor(
@@ -20,6 +28,8 @@ export class ProductAttributeKeyValueMappingController {
   ) {}
 
   @Post()
+  @ApiBody({ type: CreateProductAttributeKeyValueMappingDto })
+  @ApiCreatedResponse({ type: ProductAttributeKeyValueMapping })
   create(
     @Body()
     createProductAttributeKeyValueMappingDto: CreateProductAttributeKeyValueMappingDto,
@@ -30,11 +40,13 @@ export class ProductAttributeKeyValueMappingController {
   }
 
   @Get()
+  @ApiOkResponse({ type: ProductAttributeKeyValueMapping, isArray: true })
   findAll(): Promise<ProductAttributeKeyValueMapping[]> {
     return this.productAttributeKeyValueMappingService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: ProductAttributeKeyValueMapping })
   findOne(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<ProductAttributeKeyValueMapping> {
@@ -42,6 +54,8 @@ export class ProductAttributeKeyValueMappingController {
   }
 
   @Patch(':id')
+  @ApiBody({ type: UpdateProductAttributeKeyValueMappingDto })
+  @ApiOkResponse({ type: ProductAttributeKeyValueMapping })
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body()
@@ -54,6 +68,7 @@ export class ProductAttributeKeyValueMappingController {
   }
 
   @Delete(':id')
+  @ApiNoContentResponse()
   remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     return this.productAttributeKeyValueMappingService.remove(id);
   }

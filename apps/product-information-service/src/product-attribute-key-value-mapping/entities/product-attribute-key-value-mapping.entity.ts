@@ -11,7 +11,7 @@ import {
 } from 'sequelize-typescript';
 import { ProductAttributeKey } from '../../product-attribute-key/entities/product-attribute-key.entity';
 import { ProductAttributeValue } from '../../product-attribute-value/entities/product-attribute-value.entity';
-import { Variant } from '../../variant/entities/variant.entity';
+import { ProductVariant } from '../../product-variant/entities/product-variant.entity';
 
 @Table({
   tableName: 'variant_attribute_values',
@@ -27,7 +27,7 @@ export class ProductAttributeKeyValueMapping extends Model {
   })
   declare id: string;
 
-  @ForeignKey(() => Variant)
+  @ForeignKey(() => ProductVariant)
   @Column({
     type: DataType.UUID,
     allowNull: false,
@@ -41,8 +41,8 @@ export class ProductAttributeKeyValueMapping extends Model {
   })
   declare variant_id: string;
 
-  @BelongsTo(() => Variant)
-  declare variant: Variant;
+  @BelongsTo(() => ProductVariant)
+  declare variant: ProductVariant;
 
   @ForeignKey(() => ProductAttributeKey)
   @Column({

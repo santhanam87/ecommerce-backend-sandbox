@@ -8,11 +8,19 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CategoryRuleGroupService } from './category-rule-group.service';
 import { CreateCategoryRuleGroupDto } from './dto/create-category-rule-group.dto';
 import { UpdateCategoryRuleGroupDto } from './dto/update-category-rule-group.dto';
 import { CategoryRuleGroup } from './entities/category-rule-group.entity';
 
+@ApiTags('category-rule-groups')
 @Controller('category-rule-groups')
 export class CategoryRuleGroupController {
   constructor(
@@ -20,6 +28,8 @@ export class CategoryRuleGroupController {
   ) {}
 
   @Post()
+  @ApiBody({ type: CreateCategoryRuleGroupDto })
+  @ApiCreatedResponse({ type: CategoryRuleGroup })
   create(
     @Body() createCategoryRuleGroupDto: CreateCategoryRuleGroupDto,
   ): Promise<CategoryRuleGroup> {
@@ -27,16 +37,20 @@ export class CategoryRuleGroupController {
   }
 
   @Get()
+  @ApiOkResponse({ type: CategoryRuleGroup, isArray: true })
   findAll(): Promise<CategoryRuleGroup[]> {
     return this.categoryRuleGroupService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: CategoryRuleGroup })
   findOne(@Param('id', ParseUUIDPipe) id: string): Promise<CategoryRuleGroup> {
     return this.categoryRuleGroupService.findOne(id);
   }
 
   @Patch(':id')
+  @ApiBody({ type: UpdateCategoryRuleGroupDto })
+  @ApiOkResponse({ type: CategoryRuleGroup })
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateCategoryRuleGroupDto: UpdateCategoryRuleGroupDto,
@@ -45,6 +59,7 @@ export class CategoryRuleGroupController {
   }
 
   @Delete(':id')
+  @ApiNoContentResponse()
   remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     return this.categoryRuleGroupService.remove(id);
   }
