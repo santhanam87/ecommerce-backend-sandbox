@@ -10,17 +10,16 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { Product } from '../../product/entities/product.entity';
 import { ProductAttributeKeyValueMapping } from '../../product-attribute-key-value-mapping/entities/product-attribute-key-value-mapping.entity';
-import { ProductPropertyKeyValueMapping } from '../../product-property-key-value-mapping/entities/product-property-key-value-mapping.entity';
+import { ProductAttributeKey } from '../../product-attribute-key/entities/product-attribute-key.entity';
 
 @Table({
-  tableName: 'variants',
+  tableName: 'attribute_values',
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at',
 })
-export class Variant extends Model {
+export class ProductAttributeValue extends Model {
   @PrimaryKey
   @Column({
     type: DataType.UUID,
@@ -28,41 +27,31 @@ export class Variant extends Model {
   })
   declare id: string;
 
-  @ForeignKey(() => Product)
+  @ForeignKey(() => ProductAttributeKey)
   @Column({
     type: DataType.UUID,
     allowNull: false,
-    field: 'product_id',
+    field: 'attribute_id',
     references: {
-      model: 'products',
+      model: 'product_attribute_keys',
       key: 'id',
     },
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  declare product_id: string;
+  declare attribute_id: string;
 
-  @BelongsTo(() => Product)
-  declare product: Product;
+  @BelongsTo(() => ProductAttributeKey)
+  declare attribute: ProductAttributeKey;
 
   @HasMany(() => ProductAttributeKeyValueMapping)
-  declare attribute_mappings: ProductAttributeKeyValueMapping[];
-
-  @HasMany(() => ProductPropertyKeyValueMapping)
-  declare property_mappings: ProductPropertyKeyValueMapping[];
+  declare variant_attribute_values: ProductAttributeKeyValueMapping[];
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    unique: true,
   })
-  declare sku: string;
-
-  @Column({
-    type: DataType.DECIMAL(10, 2),
-    allowNull: false,
-  })
-  declare price: string;
+  declare value: string;
 
   @CreatedAt
   @Column({

@@ -10,17 +10,16 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { Product } from '../../product/entities/product.entity';
-import { ProductAttributeKeyValueMapping } from '../../product-attribute-key-value-mapping/entities/product-attribute-key-value-mapping.entity';
 import { ProductPropertyKeyValueMapping } from '../../product-property-key-value-mapping/entities/product-property-key-value-mapping.entity';
+import { ProductPropertyKey } from '../../product-property-key/entities/product-property-key.entity';
 
 @Table({
-  tableName: 'variants',
+  tableName: 'property_values',
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at',
 })
-export class Variant extends Model {
+export class ProductPropertyValue extends Model {
   @PrimaryKey
   @Column({
     type: DataType.UUID,
@@ -28,53 +27,43 @@ export class Variant extends Model {
   })
   declare id: string;
 
-  @ForeignKey(() => Product)
+  @ForeignKey(() => ProductPropertyKey)
   @Column({
     type: DataType.UUID,
     allowNull: false,
-    field: 'product_id',
+    field: 'property_id',
     references: {
-      model: 'products',
+      model: 'product_property_keys',
       key: 'id',
     },
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  declare product_id: string;
+  declare property_id: string;
 
-  @BelongsTo(() => Product)
-  declare product: Product;
-
-  @HasMany(() => ProductAttributeKeyValueMapping)
-  declare attribute_mappings: ProductAttributeKeyValueMapping[];
+  @BelongsTo(() => ProductPropertyKey)
+  declare property: ProductPropertyKey;
 
   @HasMany(() => ProductPropertyKeyValueMapping)
-  declare property_mappings: ProductPropertyKeyValueMapping[];
+  declare variant_property_values: ProductPropertyKeyValueMapping[];
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    unique: true,
   })
-  declare sku: string;
-
-  @Column({
-    type: DataType.DECIMAL(10, 2),
-    allowNull: false,
-  })
-  declare price: string;
+  declare value: string;
 
   @CreatedAt
   @Column({
     type: DataType.DATE,
-    field: 'created_at',
+    defaultValue: DataType.NOW,
   })
   declare created_at: Date;
 
   @UpdatedAt
   @Column({
     type: DataType.DATE,
-    field: 'updated_at',
+    defaultValue: DataType.NOW,
   })
   declare updated_at: Date;
 }

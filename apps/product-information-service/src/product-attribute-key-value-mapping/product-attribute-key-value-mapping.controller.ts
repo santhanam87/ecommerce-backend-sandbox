@@ -1,0 +1,60 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { CreateProductAttributeKeyValueMappingDto } from './dto/create-product-attribute-key-value-mapping.dto';
+import { UpdateProductAttributeKeyValueMappingDto } from './dto/update-product-attribute-key-value-mapping.dto';
+import { ProductAttributeKeyValueMapping } from './entities/product-attribute-key-value-mapping.entity';
+import { ProductAttributeKeyValueMappingService } from './product-attribute-key-value-mapping.service';
+
+@Controller('product-attribute-key-value-mappings')
+export class ProductAttributeKeyValueMappingController {
+  constructor(
+    private readonly productAttributeKeyValueMappingService: ProductAttributeKeyValueMappingService,
+  ) {}
+
+  @Post()
+  create(
+    @Body()
+    createProductAttributeKeyValueMappingDto: CreateProductAttributeKeyValueMappingDto,
+  ): Promise<ProductAttributeKeyValueMapping> {
+    return this.productAttributeKeyValueMappingService.create(
+      createProductAttributeKeyValueMappingDto,
+    );
+  }
+
+  @Get()
+  findAll(): Promise<ProductAttributeKeyValueMapping[]> {
+    return this.productAttributeKeyValueMappingService.findAll();
+  }
+
+  @Get(':id')
+  findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<ProductAttributeKeyValueMapping> {
+    return this.productAttributeKeyValueMappingService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body()
+    updateProductAttributeKeyValueMappingDto: UpdateProductAttributeKeyValueMappingDto,
+  ): Promise<ProductAttributeKeyValueMapping> {
+    return this.productAttributeKeyValueMappingService.update(
+      id,
+      updateProductAttributeKeyValueMappingDto,
+    );
+  }
+
+  @Delete(':id')
+  remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    return this.productAttributeKeyValueMappingService.remove(id);
+  }
+}
