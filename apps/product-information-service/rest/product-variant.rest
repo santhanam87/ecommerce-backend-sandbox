@@ -19,7 +19,7 @@
 # -----------------------------
 
 ### Create product
-POST {{baseUrl}}/products
+POST {{baseUrl}}/product
 Content-Type: {{contentType}}
 
 {
@@ -28,15 +28,15 @@ Content-Type: {{contentType}}
 }
 
 ### Get all products
-GET {{baseUrl}}/products
+GET {{baseUrl}}/product
 
 ### Get product by id
 # Replace with a real UUID from create/list response
 @productId = cb3ab1a5-2cd3-4b81-9aaa-2d40d3c8e0f3
-GET {{baseUrl}}/products/{{productId}}
+GET {{baseUrl}}/product/{{productId}}
 
 ### Update product
-PATCH {{baseUrl}}/products/{{productId}}
+PATCH {{baseUrl}}/product/{{productId}}
 Content-Type: {{contentType}}
 
 {
@@ -45,7 +45,7 @@ Content-Type: {{contentType}}
 }
 
 ### Delete product
-DELETE {{baseUrl}}/products/{{productId}}
+DELETE {{baseUrl}}/product/{{productId}}
 
 ###
 # -----------------------------
@@ -53,7 +53,7 @@ DELETE {{baseUrl}}/products/{{productId}}
 # -----------------------------
 
 ### Create product variant
-POST {{baseUrl}}/product-variants
+POST {{baseUrl}}/product/variants
 Content-Type: {{contentType}}
 
 {
@@ -63,13 +63,13 @@ Content-Type: {{contentType}}
 }
 
 ### Get all product variants
-GET {{baseUrl}}/product-variants
+GET {{baseUrl}}/product/variants
 
 ### Get product variant by id
-GET {{baseUrl}}/product-variants/{{productVariantId}}
+GET {{baseUrl}}/product/variants/{{productVariantId}}
 
 ### Update product variant
-PATCH {{baseUrl}}/product-variants/{{productVariantId}}
+PATCH {{baseUrl}}/product/variants/{{productVariantId}}
 Content-Type: {{contentType}}
 
 {
@@ -78,7 +78,7 @@ Content-Type: {{contentType}}
 }
 
 ### Delete product variant
-DELETE {{baseUrl}}/product-variants/{{productVariantId}}
+DELETE {{baseUrl}}/product/variants/{{productVariantId}}
 
 ###
 # -----------------------------
@@ -86,7 +86,7 @@ DELETE {{baseUrl}}/product-variants/{{productVariantId}}
 # -----------------------------
 
 ### Create product attribute key
-POST {{baseUrl}}/product-attribute-keys
+POST {{baseUrl}}/product/attribute-keys
 Content-Type: {{contentType}}
 
 {
@@ -95,13 +95,13 @@ Content-Type: {{contentType}}
 }
 
 ### Get all product attribute keys
-GET {{baseUrl}}/product-attribute-keys
+GET {{baseUrl}}/product/attribute-keys
 
 ### Get product attribute key by id
-GET {{baseUrl}}/product-attribute-keys/{{productAttributeKeyId}}
+GET {{baseUrl}}/product/attribute-keys/{{productAttributeKeyId}}
 
 ### Update product attribute key
-PATCH {{baseUrl}}/product-attribute-keys/{{productAttributeKeyId}}
+PATCH {{baseUrl}}/product/attribute-keys/{{productAttributeKeyId}}
 Content-Type: {{contentType}}
 
 {
@@ -109,7 +109,7 @@ Content-Type: {{contentType}}
 }
 
 ### Delete product attribute key
-DELETE {{baseUrl}}/product-attribute-keys/{{productAttributeKeyId}}
+DELETE {{baseUrl}}/product/attribute-keys/{{productAttributeKeyId}}
 
 ###
 # -----------------------------
@@ -117,7 +117,7 @@ DELETE {{baseUrl}}/product-attribute-keys/{{productAttributeKeyId}}
 # -----------------------------
 
 ### Create product attribute value
-POST {{baseUrl}}/product-attribute-values
+POST {{baseUrl}}/product/attribute-values
 Content-Type: {{contentType}}
 
 {
@@ -126,13 +126,13 @@ Content-Type: {{contentType}}
 }
 
 ### Get all product attribute values
-GET {{baseUrl}}/product-attribute-values
+GET {{baseUrl}}/product/attribute-values
 
 ### Get product attribute value by id
-GET {{baseUrl}}/product-attribute-values/{{productAttributeValueId}}
+GET {{baseUrl}}/product/attribute-values/{{productAttributeValueId}}
 
 ### Update product attribute value
-PATCH {{baseUrl}}/product-attribute-values/{{productAttributeValueId}}
+PATCH {{baseUrl}}/product/attribute-values/{{productAttributeValueId}}
 Content-Type: {{contentType}}
 
 {
@@ -140,7 +140,7 @@ Content-Type: {{contentType}}
 }
 
 ### Delete product attribute value
-DELETE {{baseUrl}}/product-attribute-values/{{productAttributeValueId}}
+DELETE {{baseUrl}}/product/attribute-values/{{productAttributeValueId}}
 
 ###
 # -----------------------------------------
@@ -148,7 +148,7 @@ DELETE {{baseUrl}}/product-attribute-values/{{productAttributeValueId}}
 # -----------------------------------------
 
 ### Create product attribute key value mapping
-POST {{baseUrl}}/product-attribute-key-value-mappings
+POST {{baseUrl}}/product/attribute-key-value-mappings
 Content-Type: {{contentType}}
 
 {
@@ -158,13 +158,13 @@ Content-Type: {{contentType}}
 }
 
 ### Get all product attribute key value mappings
-GET {{baseUrl}}/product-attribute-key-value-mappings
+GET {{baseUrl}}/product/attribute-key-value-mappings
 
 ### Get product attribute key value mapping by id
-GET {{baseUrl}}/product-attribute-key-value-mappings/{{productAttributeMappingId}}
+GET {{baseUrl}}/product/attribute-key-value-mappings/{{productAttributeMappingId}}
 
 ### Update product attribute key value mapping
-PATCH {{baseUrl}}/product-attribute-key-value-mappings/{{productAttributeMappingId}}
+PATCH {{baseUrl}}/product/attribute-key-value-mappings/{{productAttributeMappingId}}
 Content-Type: {{contentType}}
 
 {
@@ -172,7 +172,7 @@ Content-Type: {{contentType}}
 }
 
 ### Delete product attribute key value mapping
-DELETE {{baseUrl}}/product-attribute-key-value-mappings/{{productAttributeMappingId}}
+DELETE {{baseUrl}}/product/attribute-key-value-mappings/{{productAttributeMappingId}}
 
 ###
 # -----------------------------
@@ -180,7 +180,7 @@ DELETE {{baseUrl}}/product-attribute-key-value-mappings/{{productAttributeMappin
 # -----------------------------
 
 ### Create product property key
-POST {{baseUrl}}/product-property-keys
+POST {{baseUrl}}/product/property-keys
 Content-Type: {{contentType}}
 
 {
@@ -188,13 +188,13 @@ Content-Type: {{contentType}}
 }
 
 ### Get all product property keys
-GET {{baseUrl}}/product-property-keys
+GET {{baseUrl}}/product/property-keys
 
 ### Get product property key by id
-GET {{baseUrl}}/product-property-keys/{{productPropertyKeyId}}
+GET {{baseUrl}}/product/property-keys/{{productPropertyKeyId}}
 
 ### Update product property key
-PATCH {{baseUrl}}/product-property-keys/{{productPropertyKeyId}}
+PATCH {{baseUrl}}/product/property-keys/{{productPropertyKeyId}}
 Content-Type: {{contentType}}
 
 {
@@ -202,7 +202,7 @@ Content-Type: {{contentType}}
 }
 
 ### Delete product property key
-DELETE {{baseUrl}}/product-property-keys/{{productPropertyKeyId}}
+DELETE {{baseUrl}}/product/property-keys/{{productPropertyKeyId}}
 
 ###
 # -----------------------------
@@ -210,7 +210,7 @@ DELETE {{baseUrl}}/product-property-keys/{{productPropertyKeyId}}
 # -----------------------------
 
 ### Create product property value
-POST {{baseUrl}}/product-property-values
+POST {{baseUrl}}/product/property-values
 Content-Type: {{contentType}}
 
 {
@@ -219,13 +219,13 @@ Content-Type: {{contentType}}
 }
 
 ### Get all product property values
-GET {{baseUrl}}/product-property-values
+GET {{baseUrl}}/product/property-values
 
 ### Get product property value by id
-GET {{baseUrl}}/product-property-values/{{productPropertyValueId}}
+GET {{baseUrl}}/product/property-values/{{productPropertyValueId}}
 
 ### Update product property value
-PATCH {{baseUrl}}/product-property-values/{{productPropertyValueId}}
+PATCH {{baseUrl}}/product/property-values/{{productPropertyValueId}}
 Content-Type: {{contentType}}
 
 {
@@ -233,7 +233,7 @@ Content-Type: {{contentType}}
 }
 
 ### Delete product property value
-DELETE {{baseUrl}}/product-property-values/{{productPropertyValueId}}
+DELETE {{baseUrl}}/product/property-values/{{productPropertyValueId}}
 
 ###
 # ----------------------------------------
@@ -241,7 +241,7 @@ DELETE {{baseUrl}}/product-property-values/{{productPropertyValueId}}
 # ----------------------------------------
 
 ### Create product property key value mapping
-POST {{baseUrl}}/product-property-key-value-mappings
+POST {{baseUrl}}/product/property-key-value-mappings
 Content-Type: {{contentType}}
 
 {
@@ -251,13 +251,13 @@ Content-Type: {{contentType}}
 }
 
 ### Get all product property key value mappings
-GET {{baseUrl}}/product-property-key-value-mappings
+GET {{baseUrl}}/product/property-key-value-mappings
 
 ### Get product property key value mapping by id
-GET {{baseUrl}}/product-property-key-value-mappings/{{productPropertyMappingId}}
+GET {{baseUrl}}/product/property-key-value-mappings/{{productPropertyMappingId}}
 
 ### Update product property key value mapping
-PATCH {{baseUrl}}/product-property-key-value-mappings/{{productPropertyMappingId}}
+PATCH {{baseUrl}}/product/property-key-value-mappings/{{productPropertyMappingId}}
 Content-Type: {{contentType}}
 
 {
@@ -265,7 +265,7 @@ Content-Type: {{contentType}}
 }
 
 ### Delete product property key value mapping
-DELETE {{baseUrl}}/product-property-key-value-mappings/{{productPropertyMappingId}}
+DELETE {{baseUrl}}/product/property-key-value-mappings/{{productPropertyMappingId}}
 
 ###
 # -----------------------------
@@ -273,7 +273,7 @@ DELETE {{baseUrl}}/product-property-key-value-mappings/{{productPropertyMappingI
 # -----------------------------
 
 ### Create category
-POST {{baseUrl}}/categories
+POST {{baseUrl}}/product/categories
 Content-Type: {{contentType}}
 
 {
@@ -281,13 +281,13 @@ Content-Type: {{contentType}}
 }
 
 ### Get all categories
-GET {{baseUrl}}/categories
+GET {{baseUrl}}/product/categories
 
 ### Get category by id
-GET {{baseUrl}}/categories/{{categoryId}}
+GET {{baseUrl}}/product/categories/{{categoryId}}
 
 ### Update category
-PATCH {{baseUrl}}/categories/{{categoryId}}
+PATCH {{baseUrl}}/product/categories/{{categoryId}}
 Content-Type: {{contentType}}
 
 {
@@ -295,7 +295,7 @@ Content-Type: {{contentType}}
 }
 
 ### Delete category
-DELETE {{baseUrl}}/categories/{{categoryId}}
+DELETE {{baseUrl}}/product/categories/{{categoryId}}
 
 ###
 # -----------------------------
@@ -303,7 +303,7 @@ DELETE {{baseUrl}}/categories/{{categoryId}}
 # -----------------------------
 
 ### Create root category rule group
-POST {{baseUrl}}/category-rule-groups
+POST {{baseUrl}}/product/category-rule-groups
 Content-Type: {{contentType}}
 
 {
@@ -312,7 +312,7 @@ Content-Type: {{contentType}}
 }
 
 ### Create child category rule group
-POST {{baseUrl}}/category-rule-groups
+POST {{baseUrl}}/product/category-rule-groups
 Content-Type: {{contentType}}
 
 {
@@ -322,13 +322,13 @@ Content-Type: {{contentType}}
 }
 
 ### Get all category rule groups
-GET {{baseUrl}}/category-rule-groups
+GET {{baseUrl}}/product/category-rule-groups
 
 ### Get category rule group by id
-GET {{baseUrl}}/category-rule-groups/{{categoryRuleGroupId}}
+GET {{baseUrl}}/product/category-rule-groups/{{categoryRuleGroupId}}
 
 ### Update category rule group
-PATCH {{baseUrl}}/category-rule-groups/{{categoryRuleGroupId}}
+PATCH {{baseUrl}}/product/category-rule-groups/{{categoryRuleGroupId}}
 Content-Type: {{contentType}}
 
 {
@@ -336,7 +336,7 @@ Content-Type: {{contentType}}
 }
 
 ### Delete category rule group
-DELETE {{baseUrl}}/category-rule-groups/{{categoryRuleGroupId}}
+DELETE {{baseUrl}}/product/category-rule-groups/{{categoryRuleGroupId}}
 
 ###
 # -----------------------------
@@ -344,7 +344,7 @@ DELETE {{baseUrl}}/category-rule-groups/{{categoryRuleGroupId}}
 # -----------------------------
 
 ### Create category rule condition
-POST {{baseUrl}}/category-rule-conditions
+POST {{baseUrl}}/product/category-rule-conditions
 Content-Type: {{contentType}}
 
 {
@@ -355,13 +355,13 @@ Content-Type: {{contentType}}
 }
 
 ### Get all category rule conditions
-GET {{baseUrl}}/category-rule-conditions
+GET {{baseUrl}}/product/category-rule-conditions
 
 ### Get category rule condition by id
-GET {{baseUrl}}/category-rule-conditions/{{categoryRuleConditionId}}
+GET {{baseUrl}}/product/category-rule-conditions/{{categoryRuleConditionId}}
 
 ### Update category rule condition
-PATCH {{baseUrl}}/category-rule-conditions/{{categoryRuleConditionId}}
+PATCH {{baseUrl}}/product/category-rule-conditions/{{categoryRuleConditionId}}
 Content-Type: {{contentType}}
 
 {
@@ -370,4 +370,4 @@ Content-Type: {{contentType}}
 }
 
 ### Delete category rule condition
-DELETE {{baseUrl}}/category-rule-conditions/{{categoryRuleConditionId}}
+DELETE {{baseUrl}}/product/category-rule-conditions/{{categoryRuleConditionId}}

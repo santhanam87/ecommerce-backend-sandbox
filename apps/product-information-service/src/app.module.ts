@@ -4,7 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, RouterModule } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
 import { CategoryModule } from './category/category.module';
 import { CategoryRuleConditionModule } from './category-rule-condition/category-rule-condition.module';
@@ -28,6 +28,54 @@ import { ProductVariantModule } from './product-variant/product-variant.module';
       ],
       isGlobal: true,
     }),
+    RouterModule.register([
+      {
+        path: 'product',
+        module: ProductModule,
+        children: [
+          {
+            path: 'categories',
+            module: CategoryModule,
+          },
+          {
+            path: 'category-rule-groups',
+            module: CategoryRuleGroupModule,
+          },
+          {
+            path: 'category-rule-conditions',
+            module: CategoryRuleConditionModule,
+          },
+          {
+            path: 'variants',
+            module: ProductVariantModule,
+          },
+          {
+            path: 'attribute-keys',
+            module: ProductAttributeKeyModule,
+          },
+          {
+            path: 'attribute-values',
+            module: ProductAttributeValueModule,
+          },
+          {
+            path: 'attribute-key-value-mappings',
+            module: ProductAttributeKeyValueMappingModule,
+          },
+          {
+            path: 'property-keys',
+            module: ProductPropertyKeyModule,
+          },
+          {
+            path: 'property-values',
+            module: ProductPropertyValueModule,
+          },
+          {
+            path: 'property-key-value-mappings',
+            module: ProductPropertyKeyValueMappingModule,
+          },
+        ],
+      },
+    ]),
     DatabaseModule,
     CategoryModule,
     CategoryRuleConditionModule,

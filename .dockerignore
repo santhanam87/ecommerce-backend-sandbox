@@ -1,0 +1,47 @@
+# Version control
+.git
+.gitignore
+
+# Dependencies (reinstalled inside the container)
+node_modules
+**/node_modules
+
+# Compiled output (rebuilt inside the container)
+dist
+**/dist
+build
+
+# pnpm virtual store
+.pnpm-store
+
+# Test & coverage artefacts
+coverage
+**/.nyc_output
+**/*.spec.ts
+**/*.e2e-spec.ts
+**/test/
+
+# Environment files – never bake secrets into the image
+.env
+.env.*
+!.env.example
+
+# Editor / OS artefacts
+.DS_Store
+.idea
+*.launch
+.settings
+*.sublime-workspace
+
+# Logs
+logs
+*.log
+
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo
+**/*.tsbuildinfo
+
+# Docker files themselves
+**/Dockerfile
+**/.dockerignore
+**/docker-compose*.yml

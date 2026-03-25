@@ -20,8 +20,8 @@ import { UpdateProductVariantDto } from './dto/update-product-variant.dto';
 import { ProductVariant } from './entities/product-variant.entity';
 import { ProductVariantService } from './product-variant.service';
 
-@ApiTags('product-variants')
-@Controller('product-variants')
+@ApiTags('product/variants')
+@Controller()
 export class ProductVariantController {
   constructor(private readonly productVariantService: ProductVariantService) {}
 

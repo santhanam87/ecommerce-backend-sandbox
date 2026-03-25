@@ -20,8 +20,8 @@ import { CreateCategoryRuleConditionDto } from './dto/create-category-rule-condi
 import { UpdateCategoryRuleConditionDto } from './dto/update-category-rule-condition.dto';
 import { CategoryRuleCondition } from './entities/category-rule-condition.entity';
 
-@ApiTags('category-rule-conditions')
-@Controller('category-rule-conditions')
+@ApiTags('product/category-rule-conditions')
+@Controller()
 export class CategoryRuleConditionController {
   constructor(
     private readonly categoryRuleConditionService: CategoryRuleConditionService,

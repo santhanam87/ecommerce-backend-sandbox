@@ -20,8 +20,8 @@ import { UpdateProductAttributeValueDto } from './dto/update-product-attribute-v
 import { ProductAttributeValue } from './entities/product-attribute-value.entity';
 import { ProductAttributeValueService } from './product-attribute-value.service';
 
-@ApiTags('product-attribute-values')
-@Controller('product-attribute-values')
+@ApiTags('product/attribute-values')
+@Controller()
 export class ProductAttributeValueController {
   constructor(
     private readonly productAttributeValueService: ProductAttributeValueService,

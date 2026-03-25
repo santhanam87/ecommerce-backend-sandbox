@@ -20,8 +20,8 @@ import { UpdateProductPropertyKeyValueMappingDto } from './dto/update-product-pr
 import { ProductPropertyKeyValueMapping } from './entities/product-property-key-value-mapping.entity';
 import { ProductPropertyKeyValueMappingService } from './product-property-key-value-mapping.service';
 
-@ApiTags('product-property-key-value-mappings')
-@Controller('product-property-key-value-mappings')
+@ApiTags('product/property-key-value-mappings')
+@Controller()
 export class ProductPropertyKeyValueMappingController {
   constructor(
     private readonly productPropertyKeyValueMappingService: ProductPropertyKeyValueMappingService,
