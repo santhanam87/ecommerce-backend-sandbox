@@ -20,7 +20,7 @@ import { UpdateProductAttributeKeyValueMappingDto } from './dto/update-product-a
 import { ProductAttributeKeyValueMapping } from './entities/product-attribute-key-value-mapping.entity';
 import { ProductAttributeKeyValueMappingService } from './product-attribute-key-value-mapping.service';
 
-@ApiTags('product/attribute-key-value-mappings')
+@ApiTags('products/attribute-key-value-mappings')
 @Controller()
 export class ProductAttributeKeyValueMappingController {
   constructor(

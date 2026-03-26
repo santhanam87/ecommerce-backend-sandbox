@@ -30,7 +30,7 @@ import { ProductVariantModule } from './product-variant/product-variant.module';
     }),
     RouterModule.register([
       {
-        path: 'product',
+        path: 'products',
         module: ProductModule,
         children: [
           {

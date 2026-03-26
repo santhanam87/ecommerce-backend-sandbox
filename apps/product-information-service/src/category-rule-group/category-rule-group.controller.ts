@@ -20,7 +20,7 @@ import { CreateCategoryRuleGroupDto } from './dto/create-category-rule-group.dto
 import { UpdateCategoryRuleGroupDto } from './dto/update-category-rule-group.dto';
 import { CategoryRuleGroup } from './entities/category-rule-group.entity';
 
-@ApiTags('product/category-rule-groups')
+@ApiTags('products/category-rule-groups')
 @Controller()
 export class CategoryRuleGroupController {
   constructor(

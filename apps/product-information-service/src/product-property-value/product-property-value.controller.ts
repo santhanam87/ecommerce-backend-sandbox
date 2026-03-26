@@ -20,7 +20,7 @@ import { UpdateProductPropertyValueDto } from './dto/update-product-property-val
 import { ProductPropertyValue } from './entities/product-property-value.entity';
 import { ProductPropertyValueService } from './product-property-value.service';
 
-@ApiTags('product/property-values')
+@ApiTags('products/property-values')
 @Controller()
 export class ProductPropertyValueController {
   constructor(
