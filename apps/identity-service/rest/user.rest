@@ -1,0 +1,42 @@
+@baseUrl = http://localhost:3004
+@contentType = application/json
+
+@userId = 11111111-1111-4111-8111-111111111111
+@userEmail = test@example.com
+
+###
+# ---- USER CRUD ----
+
+### Create user
+POST {{baseUrl}}/users
+Content-Type: {{contentType}}
+
+{
+  "email": "john.doe@example.com",
+  "name": "John Doe",
+  "password": "SecurePassword123!"
+}
+
+### Get all users
+GET {{baseUrl}}/users
+
+### Get user by id
+GET {{baseUrl}}/users/{{userId}}
+
+### Update user
+PATCH {{baseUrl}}/users/{{userId}}
+Content-Type: {{contentType}}
+
+{
+  "name": "John Updated",
+  "email": "john.updated@example.com"
+}
+
+### Delete user
+DELETE {{baseUrl}}/users/{{userId}}
+
+###
+# ---- HEALTH CHECK ----
+
+### Health check
+GET {{baseUrl}}/

@@ -1,0 +1,28 @@
+services:
+  identity-service:
+    build:
+      # Build context stays at the monorepo root so pnpm-workspace.yaml
+      # and the root pnpm-lock.yaml are available during the Docker build.
+      context: ../..
+      dockerfile: apps/identity-service/Dockerfile
+    image: identity-service:latest
+    container_name: identity-service
+    ports:
+      - "${PORT:-3004}:${PORT:-3004}"
+    environment:
+      NODE_ENV: production
+      PORT: ${PORT:-3004}
+
+      DATABASE_URL: postgresql://${DB_USERNAME:-postgres}:${DB_PASSWORD:-postgres}@host.docker.internal:${DB_PORT:-5432}/${DB_NAME:-identity-service}
+      DB_HOST: host.docker.internal
+      DB_PORT: ${DB_PORT:-5432}
+      DB_USERNAME: ${DB_USERNAME:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-identity-service}
+
+      JWT_SECRET: ${JWT_SECRET:-some-super-secret-key}
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    restart: unless-stopped
