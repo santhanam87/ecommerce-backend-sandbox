@@ -7,6 +7,8 @@ import { TenantService } from "./tenant/tenant.service";
 import { TenantController } from "./tenant/tenant.controller";
 import { UserService } from "./user/user.service";
 import { UserController } from "./user/user.controller";
+import { RoleService } from "./role/role.service";
+import { RoleController } from "./role/role.controller";
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { UserController } from "./user/user.controller";
       inject: [ConfigService],
     }),
   ],
-  controllers: [TenantController, UserController],
+  controllers: [TenantController, UserController, RoleController],
   providers: [
     {
       provide: "JwtStrategy",
@@ -31,6 +33,7 @@ import { UserController } from "./user/user.controller";
     },
     TenantService,
     UserService,
+    RoleService,
     JwtAuthGuard,
   ],
 })
