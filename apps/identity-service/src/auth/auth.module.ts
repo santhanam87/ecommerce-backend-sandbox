@@ -1,8 +1,10 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
-import { JwtStrategy } from "./jwt.strategy";
-import { JwtAuthGuard } from "./jwt.auth-guard";
+import { JwtStrategy } from "./strategies/jwt.strategy";
+import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { TenantService } from "./tenant/tenant.service";
+import { TenantController } from "./tenant/tenant.controller";
 
 @Module({
   imports: [
@@ -15,6 +17,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
       inject: [ConfigService],
     }),
   ],
+  controllers: [TenantController],
   providers: [
     {
       provide: "JwtStrategy",
@@ -24,6 +27,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
       },
       inject: [ConfigService],
     },
+    TenantService,
     JwtAuthGuard,
   ],
 })

@@ -1,5 +1,6 @@
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { Sequelize } from "sequelize-typescript";
+import { Tenant } from "src/auth/tenant/entities/tenant.entity";
 
 export const databaseProviders = [
   {
@@ -14,7 +15,7 @@ export const databaseProviders = [
         username: configService.get<string>("DB_USERNAME"),
         password: configService.get<string>("DB_PASSWORD"),
         database: configService.get<string>("DB_NAME"),
-        models: [],
+        models: [Tenant],
       });
       await sequelize.sync();
       console.info("Identity service database connected successfully");

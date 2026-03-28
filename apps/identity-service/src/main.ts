@@ -13,7 +13,7 @@ async function bootstrap() {
     .build();
 
   const swaggerDocument = SwaggerModule.createDocument(webApp, swaggerConfig);
-  SwaggerModule.setup("docs", webApp, swaggerDocument);
+  SwaggerModule.setup("identity/docs", webApp, swaggerDocument);
 
   await webApp.startAllMicroservices();
   await webApp.listen(process.env.PORT || 3004);
@@ -23,7 +23,7 @@ async function bootstrap() {
 bootstrap()
   .then((url) => {
     console.log(`Identity service is running on ${url}`);
-    console.log(`Swagger docs available at ${url}/docs`);
+    console.log(`Swagger docs available at ${url}/identity/docs`);
   })
   .catch((err) => {
     console.error("Error starting identity service:", err);
