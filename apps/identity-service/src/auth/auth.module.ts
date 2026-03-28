@@ -5,6 +5,8 @@ import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TenantService } from "./tenant/tenant.service";
 import { TenantController } from "./tenant/tenant.controller";
+import { UserService } from "./user/user.service";
+import { UserController } from "./user/user.controller";
 
 @Module({
   imports: [
@@ -17,7 +19,7 @@ import { TenantController } from "./tenant/tenant.controller";
       inject: [ConfigService],
     }),
   ],
-  controllers: [TenantController],
+  controllers: [TenantController, UserController],
   providers: [
     {
       provide: "JwtStrategy",
@@ -28,6 +30,7 @@ import { TenantController } from "./tenant/tenant.controller";
       inject: [ConfigService],
     },
     TenantService,
+    UserService,
     JwtAuthGuard,
   ],
 })
