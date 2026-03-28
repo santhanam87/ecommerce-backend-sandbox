@@ -9,6 +9,10 @@ import { UserService } from "./user/user.service";
 import { UserController } from "./user/user.controller";
 import { RoleService } from "./role/role.service";
 import { RoleController } from "./role/role.controller";
+import { RolePermissionService } from "./role-permission/role-permission.service";
+import { RolePermissionController } from "./role-permission/role-permission.controller";
+import { UserRoleService } from "./user-role/user-role.service";
+import { UserRoleController } from "./user-role/user-role.controller";
 
 @Module({
   imports: [
@@ -21,7 +25,13 @@ import { RoleController } from "./role/role.controller";
       inject: [ConfigService],
     }),
   ],
-  controllers: [TenantController, UserController, RoleController],
+  controllers: [
+    TenantController,
+    UserController,
+    RoleController,
+    RolePermissionController,
+    UserRoleController,
+  ],
   providers: [
     {
       provide: "JwtStrategy",
@@ -34,6 +44,8 @@ import { RoleController } from "./role/role.controller";
     TenantService,
     UserService,
     RoleService,
+    RolePermissionService,
+    UserRoleService,
     JwtAuthGuard,
   ],
 })
