@@ -12,7 +12,9 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
 
-  const swaggerDocument = SwaggerModule.createDocument(webApp, swaggerConfig);
+  const swaggerDocument = SwaggerModule.createDocument(webApp, swaggerConfig, {
+    deepScanRoutes: true,
+  });
   SwaggerModule.setup("identity/docs", webApp, swaggerDocument);
 
   await webApp.startAllMicroservices();

@@ -1,14 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { BaseResourceResponseDto } from "../../dto/base-resource-response.dto";
 
-export class CreateTenantDto {
+export class TenantResponseDto extends BaseResourceResponseDto {
   @ApiProperty({ example: "acme" })
-  @IsString()
-  @IsNotEmpty()
   tenantName: string;
 
   @ApiProperty({ example: "premium" })
-  @IsString()
-  @IsNotEmpty()
   subscriptionType: string;
 }
