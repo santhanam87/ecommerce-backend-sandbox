@@ -8,7 +8,7 @@ import {
 } from "@nestjs/swagger";
 import { JwtAuthGuard } from "../guards/jwt-auth.guard";
 import { CreateUserRoleDto } from "./dto/create-user-role.dto";
-import { UserRoleResponseDto } from "./dto/user-role-response.dto";
+import { UserRole } from "./entities/user-role.entity";
 import { UserRoleService } from "./user-role.service";
 
 @ApiTags("User Roles")
@@ -21,7 +21,7 @@ export class UserRoleController {
   @ApiOperation({ summary: "Assign role to user" })
   @ApiCreatedResponse({
     description: "User role created successfully",
-    type: UserRoleResponseDto,
+    type: UserRole,
   })
   @Post()
   create(@Body() createUserRoleDto: CreateUserRoleDto) {
@@ -31,7 +31,7 @@ export class UserRoleController {
   @ApiOperation({ summary: "List user roles" })
   @ApiOkResponse({
     description: "User roles retrieved successfully",
-    type: UserRoleResponseDto,
+    type: UserRole,
     isArray: true,
   })
   @Get()

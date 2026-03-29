@@ -8,7 +8,7 @@ import {
 } from "@nestjs/swagger";
 import { JwtAuthGuard } from "../guards/jwt-auth.guard";
 import { CreateRoleDto } from "./dto/create-role.dto";
-import { RoleResponseDto } from "./dto/role-response.dto";
+import { Role } from "./entities/role.entity";
 import { RoleService } from "./role.service";
 
 @ApiTags("Roles")
@@ -21,7 +21,7 @@ export class RoleController {
   @ApiOperation({ summary: "Create role" })
   @ApiCreatedResponse({
     description: "Role created successfully",
-    type: RoleResponseDto,
+    type: Role,
   })
   @Post()
   create(@Body() createRoleDto: CreateRoleDto) {
@@ -31,7 +31,7 @@ export class RoleController {
   @ApiOperation({ summary: "List roles" })
   @ApiOkResponse({
     description: "Roles retrieved successfully",
-    type: RoleResponseDto,
+    type: Role,
     isArray: true,
   })
   @Get()

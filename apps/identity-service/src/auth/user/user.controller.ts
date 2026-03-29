@@ -8,7 +8,7 @@ import {
 } from "@nestjs/swagger";
 import { JwtAuthGuard } from "../guards/jwt-auth.guard";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { UserResponseDto } from "./dto/user-response.dto";
+import { User } from "./entities/user.entity";
 import { UserService } from "./user.service";
 
 @ApiTags("Users")
@@ -21,7 +21,7 @@ export class UserController {
   @ApiOperation({ summary: "Create user" })
   @ApiCreatedResponse({
     description: "User created successfully",
-    type: UserResponseDto,
+    type: User,
   })
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -31,7 +31,7 @@ export class UserController {
   @ApiOperation({ summary: "List users" })
   @ApiOkResponse({
     description: "Users retrieved successfully",
-    type: UserResponseDto,
+    type: User,
     isArray: true,
   })
   @Get()

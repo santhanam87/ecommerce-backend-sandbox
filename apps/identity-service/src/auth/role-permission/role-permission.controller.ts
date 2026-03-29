@@ -18,7 +18,7 @@ import {
 } from "@nestjs/swagger";
 import { JwtAuthGuard } from "../guards/jwt-auth.guard";
 import { CreateRolePermissionDto } from "./dto/create-role-permission.dto";
-import { RolePermissionResponseDto } from "./dto/role-permission-response.dto";
+import { RolePermission } from "./entities/role-permission.entity";
 import { UpdateRolePermissionValueDto } from "./dto/update-role-permission-value.dto";
 import { RolePermissionService } from "./role-permission.service";
 
@@ -32,7 +32,7 @@ export class RolePermissionController {
   @ApiOperation({ summary: "Create role permission" })
   @ApiCreatedResponse({
     description: "Role permission created successfully",
-    type: RolePermissionResponseDto,
+    type: RolePermission,
   })
   @Post()
   create(@Body() createRolePermissionDto: CreateRolePermissionDto) {
@@ -42,7 +42,7 @@ export class RolePermissionController {
   @ApiOperation({ summary: "List role permissions" })
   @ApiOkResponse({
     description: "Role permissions retrieved successfully",
-    type: RolePermissionResponseDto,
+    type: RolePermission,
     isArray: true,
   })
   @Get()
@@ -54,7 +54,7 @@ export class RolePermissionController {
   @ApiParam({ name: "id", description: "Role permission id" })
   @ApiOkResponse({
     description: "Role permission value updated successfully",
-    type: RolePermissionResponseDto,
+    type: RolePermission,
   })
   @ApiNotFoundResponse({ description: "Role permission not found" })
   @Patch(":id/value")

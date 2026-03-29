@@ -8,7 +8,7 @@ import {
 } from "@nestjs/swagger";
 import { JwtAuthGuard } from "../guards/jwt-auth.guard";
 import { CreateTenantDto } from "./dto/create-tenant.dto";
-import { TenantResponseDto } from "./dto/tenant-response.dto";
+import { Tenant } from "./entities/tenant.entity";
 import { TenantService } from "./tenant.service";
 
 @ApiTags("Tenants")
@@ -21,7 +21,7 @@ export class TenantController {
   @ApiOperation({ summary: "Create tenant" })
   @ApiCreatedResponse({
     description: "Tenant created successfully",
-    type: TenantResponseDto,
+    type: Tenant,
   })
   @Post()
   create(@Body() createTenantDto: CreateTenantDto) {
@@ -31,7 +31,7 @@ export class TenantController {
   @ApiOperation({ summary: "List tenants" })
   @ApiOkResponse({
     description: "Tenants retrieved successfully",
-    type: TenantResponseDto,
+    type: Tenant,
     isArray: true,
   })
   @Get()
