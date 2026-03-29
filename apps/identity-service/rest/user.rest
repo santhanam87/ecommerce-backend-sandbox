@@ -1,42 +1,141 @@
 @baseUrl = http://localhost:3004
 @contentType = application/json
 
-@userId = 11111111-1111-4111-8111-111111111111
+@tenantId = 4b032f7c-6796-4632-9183-76dd601f0ea7
+@userId = a20440aa-90f7-4c87-a1d5-0e8f7b586951
+@roleId = d009b4c2-3e74-473d-b524-545a9de86a47
+@rolePermissionId = 04da7f13-dda3-40ec-8a37-51b3c294d355
 @userEmail = test@example.com
+@userPassword = SecurePassword123!
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImEyMDQ0MGFhLTkwZjctNGM4Ny1hMWQ1LTBlOGY3YjU4Njk1MSIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsInRlbmFudF9pZCI6IjRiMDMyZjdjLTY3OTYtNDYzMi05MTgzLTc2ZGQ2MDFmMGVhNyIsImlzX2FjdGl2ZSI6dHJ1ZSwicm9sZXMiOltdLCJpYXQiOjE3NzQ3NDY5NTAsImV4cCI6MTc3NDgzMzM1MH0.F6dPb5jF5tzA1c2XcD-lUJRnrg3VnMO3Q4GmbC-MjGM
+@refreshToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhMjA0NDBhYS05MGY3LTRjODctYTFkNS0wZThmN2I1ODY5NTEiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTc3NDc0Njk1MCwiZXhwIjoxNzc1MzUxNzUwfQ.2fYX5HxEabmde_aeSVEBaLnuZrmWu25OcwADerz-Am8
 
 ###
-# ---- USER CRUD ----
+# ---- AUTH ----
 
-### Create user
-POST {{baseUrl}}/users
+### Login active user
+POST {{baseUrl}}/identity/auth/login
 Content-Type: {{contentType}}
 
 {
-  "email": "john.doe@example.com",
-  "name": "John Doe",
-  "password": "SecurePassword123!"
+  "email": "{{userEmail}}",
+  "password": "{{userPassword}}"
+}
+
+### Refresh tokens
+POST {{baseUrl}}/identity/auth/refresh
+Content-Type: {{contentType}}
+
+{
+  "refresh_token": "{{refreshToken}}"
+}
+
+###
+# ---- TENANT ----
+
+### Create tenant
+POST {{baseUrl}}/identity/auth/tenants
+Authorization: Bearer {{accessToken}}
+Content-Type: {{contentType}}
+
+{
+  "tenantName": "Acme Retail",
+  "subscriptionType": "premium"
+}
+
+### Get all tenants
+GET {{baseUrl}}/identity/auth/tenants
+Authorization: Bearer {{accessToken}}
+
+###
+# ---- USER ----
+
+### Create user
+POST {{baseUrl}}/identity/auth/users
+Authorization: Bearer {{accessToken}}
+Content-Type: {{contentType}}
+
+{
+  "tenant_id": "{{tenantId}}",
+  "email": "{{userEmail}}",
+  "password": "{{userPassword}}"
 }
 
 ### Get all users
-GET {{baseUrl}}/users
+GET {{baseUrl}}/identity/auth/users
+Authorization: Bearer {{accessToken}}
 
-### Get user by id
-GET {{baseUrl}}/users/{{userId}}
+###
+# ---- ROLE ----
 
-### Update user
-PATCH {{baseUrl}}/users/{{userId}}
+### Create role
+POST {{baseUrl}}/identity/auth/roles
+Authorization: Bearer {{accessToken}}
 Content-Type: {{contentType}}
 
 {
-  "name": "John Updated",
-  "email": "john.updated@example.com"
+  "tenant_id": "{{tenantId}}",
+  "name": "admin"
 }
 
-### Delete user
-DELETE {{baseUrl}}/users/{{userId}}
+### Get all roles
+GET {{baseUrl}}/identity/auth/roles
+Authorization: Bearer {{accessToken}}
 
 ###
-# ---- HEALTH CHECK ----
+# ---- ROLE PERMISSION ----
 
-### Health check
-GET {{baseUrl}}/
+### Create role permission
+POST {{baseUrl}}/identity/auth/role-permissions
+Authorization: Bearer {{accessToken}}
+Content-Type: {{contentType}}
+
+{
+  "role_id": "{{roleId}}",
+  "permission": "product.create",
+  "value": {
+    "allow": true,
+    "scopes": ["all"]
+  }
+}
+
+### Get all role permissions
+GET {{baseUrl}}/identity/auth/role-permissions
+Authorization: Bearer {{accessToken}}
+
+### Update role permission value
+PATCH {{baseUrl}}/identity/auth/role-permissions/{{rolePermissionId}}/value
+Authorization: Bearer {{accessToken}}
+Content-Type: {{contentType}}
+
+{
+  "value": {
+    "allow": false,
+    "scopes": ["own"]
+  }
+}
+
+###
+# ---- USER ROLE ----
+
+### Create user-role mapping
+POST {{baseUrl}}/identity/auth/user-roles
+Authorization: Bearer {{accessToken}}
+Content-Type: {{contentType}}
+
+{
+  "user_id": "{{userId}}",
+  "role_id": "{{roleId}}"
+}
+
+### Get all user-role mappings
+GET {{baseUrl}}/identity/auth/user-roles
+Authorization: Bearer {{accessToken}}
+
+###
+# ---- NOTES ----
+
+### 1. Create a tenant first, then create a user and a role for that tenant.
+### 2. Run login and copy access_token and refresh_token into the variables above.
+### 3. Use the returned access token for all protected routes.
+### 4. Use the created role id for role-permission and user-role requests.

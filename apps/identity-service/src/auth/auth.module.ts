@@ -3,6 +3,8 @@ import { JwtModule } from "@nestjs/jwt";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { AuthController } from "./auth.controller";
+import { AuthService } from "./auth.service";
 import { TenantService } from "./tenant/tenant.service";
 import { TenantController } from "./tenant/tenant.controller";
 import { UserService } from "./user/user.service";
@@ -26,6 +28,7 @@ import { UserRoleController } from "./user-role/user-role.controller";
     }),
   ],
   controllers: [
+    AuthController,
     TenantController,
     UserController,
     RoleController,
@@ -41,6 +44,7 @@ import { UserRoleController } from "./user-role/user-role.controller";
       },
       inject: [ConfigService],
     },
+    AuthService,
     TenantService,
     UserService,
     RoleService,
