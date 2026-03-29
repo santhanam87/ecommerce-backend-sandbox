@@ -1,8 +1,18 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
-import { JwtStrategy } from "./jwt.strategy";
-import { JwtAuthGuard } from "./jwt.auth-guard";
+import { JwtStrategy } from "./strategies/jwt.strategy";
+import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { TenantService } from "./tenant/tenant.service";
+import { TenantController } from "./tenant/tenant.controller";
+import { UserService } from "./user/user.service";
+import { UserController } from "./user/user.controller";
+import { RoleService } from "./role/role.service";
+import { RoleController } from "./role/role.controller";
+import { RolePermissionService } from "./role-permission/role-permission.service";
+import { RolePermissionController } from "./role-permission/role-permission.controller";
+import { UserRoleService } from "./user-role/user-role.service";
+import { UserRoleController } from "./user-role/user-role.controller";
 
 @Module({
   imports: [
@@ -15,6 +25,13 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
       inject: [ConfigService],
     }),
   ],
+  controllers: [
+    TenantController,
+    UserController,
+    RoleController,
+    RolePermissionController,
+    UserRoleController,
+  ],
   providers: [
     {
       provide: "JwtStrategy",
@@ -24,6 +41,11 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
       },
       inject: [ConfigService],
     },
+    TenantService,
+    UserService,
+    RoleService,
+    RolePermissionService,
+    UserRoleService,
     JwtAuthGuard,
   ],
 })

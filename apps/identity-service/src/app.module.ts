@@ -4,7 +4,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { ConfigModule } from "@nestjs/config";
 import { AuthModule } from "./auth/auth.module";
-import { APP_FILTER } from "@nestjs/core";
+import { APP_FILTER, RouterModule } from "@nestjs/core";
 import { HttpExceptionFilter } from "./common/filter/http-exception.filter";
 import { DatabaseModule } from "./database/database.module";
 
@@ -17,6 +17,17 @@ import { DatabaseModule } from "./database/database.module";
       ],
       isGlobal: true,
     }),
+    RouterModule.register([
+      {
+        path: "identity",
+        children: [
+          {
+            path: "auth",
+            module: AuthModule,
+          },
+        ],
+      },
+    ]),
     DatabaseModule,
     AuthModule,
   ],
