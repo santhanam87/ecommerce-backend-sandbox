@@ -6,6 +6,8 @@ import {
   ApiOperation,
   ApiTags,
 } from "@nestjs/swagger";
+import type { AccessTokenPayload } from "src/auth/types/token-payload.type";
+import { GetUser } from "src/common/decorator/user.decorator";
 import { JwtAuthGuard } from "../guards/jwt-auth.guard";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./entities/user.entity";
@@ -35,7 +37,8 @@ export class UserController {
     isArray: true,
   })
   @Get()
-  findAll() {
+  findAll(@GetUser() user: AccessTokenPayload) {
+    console.log("Authenticated user payload:", user);
     return this.userService.findAll();
   }
 }

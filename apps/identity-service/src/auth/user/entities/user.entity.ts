@@ -37,6 +37,11 @@ export class User extends Model<User> {
   @Column({ type: DataType.STRING, allowNull: false })
   declare password: string;
 
+  @ApiProperty({ example: true })
+  @Default(true)
+  @Column({ type: DataType.BOOLEAN, allowNull: false })
+  declare is_active: boolean;
+
   @ApiProperty({ example: "2026-03-28T09:30:00.000Z" })
   declare createdAt: Date;
 
