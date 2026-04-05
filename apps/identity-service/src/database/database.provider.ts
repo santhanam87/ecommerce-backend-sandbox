@@ -21,6 +21,7 @@ export const databaseProviders = [
         database: configService.get<string>("DB_NAME"),
         models: [Tenant, User, Role, RolePermission, UserRole],
       });
+
       await sequelize.sync();
       console.info("Identity service database connected successfully");
       return sequelize;
