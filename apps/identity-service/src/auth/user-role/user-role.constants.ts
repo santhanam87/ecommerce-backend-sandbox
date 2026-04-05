@@ -5,4 +5,6 @@ export const USER_ROLE_ERROR_MESSAGES = {
     "You are not allowed to create user-role mapping",
   CANNOT_UPDATE_OTHER_USER_ACTIVE_ROLE:
     "You can only update your own active role",
+  CANNOT_READ_USER_ROLES:
+    "Only users with user-role.read permission can read user roles",
 } as const;

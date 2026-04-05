@@ -4,11 +4,6 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { Op } from "sequelize";
-import {
-  PERMISSION_KEYS,
-  PERMISSION_SCOPE_BY_KEY,
-} from "src/common/constants/permission.constants";
-import { RolePermission } from "../role-permission/entities/role-permission.entity";
 import { CreateUserRoleDto } from "./dto/create-user-role.dto";
 import { USER_ROLE_ERROR_MESSAGES } from "./user-role.constants";
 import { UserRole } from "./entities/user-role.entity";
@@ -17,10 +12,7 @@ import { User } from "../user/entities/user.entity";
 
 @Injectable()
 export class UserRoleService {
-  async create(
-    createUserRoleDto: CreateUserRoleDto,
-    actorUserId: string,
-  ): Promise<UserRole> {
+  async create(createUserRoleDto: CreateUserRoleDto): Promise<UserRole> {
     const sequelize = UserRole.sequelize;
 
     if (!sequelize) {
@@ -30,45 +22,6 @@ export class UserRoleService {
     }
 
     const userRole = await sequelize.transaction(async (transaction) => {
-      const actorActiveRole = await UserRole.findOne({
-        where: {
-          user_id: actorUserId,
-          is_active_role: true,
-        },
-        include: [
-          {
-            model: Role,
-            include: [RolePermission],
-          },
-        ],
-        transaction,
-      });
-
-      const canCreateUserRoleMapping = (
-        actorActiveRole?.role?.rolePermissions || []
-      ).some((permission) => {
-        if (permission.permission !== PERMISSION_KEYS.USER_ROLE) {
-          return false;
-        }
-
-        const value = permission.value as {
-          allow?: boolean;
-          scope?: string[];
-        };
-        const scopes = value.scope || [];
-        const hasCreateScope = scopes.includes(
-          PERMISSION_SCOPE_BY_KEY[PERMISSION_KEYS.USER_ROLE].CREATE,
-        );
-
-        return Boolean(value.allow) && hasCreateScope;
-      });
-
-      if (!canCreateUserRoleMapping) {
-        throw new ForbiddenException(
-          USER_ROLE_ERROR_MESSAGES.CANNOT_CREATE_USER_ROLE_MAPPING,
-        );
-      }
-
       const existingActiveRole = await UserRole.findOne({
         where: {
           user_id: createUserRoleDto.user_id,
