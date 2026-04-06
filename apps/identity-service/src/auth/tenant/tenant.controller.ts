@@ -28,6 +28,7 @@ import { TenantSubscriptionResponseDto } from "./dto/tenant-subscription-respons
 import { TenantStatusResponseDto } from "./dto/tenant-status-response.dto";
 import { UpdateTenantSubscriptionDto } from "./dto/update-tenant-subscription.dto";
 import { UpdateTenantStatusDto } from "./dto/update-tenant-status.dto";
+import { TENANT_ERROR_MESSAGES } from "./tenant.constants";
 import { Tenant } from "./entities/tenant.entity";
 import { TenantService } from "./tenant.service";
 
@@ -81,7 +82,7 @@ export class TenantController {
   @ApiForbiddenResponse({
     description: `Requires '${PERMISSION_KEYS.TENANT}.${PERMISSION_SCOPE_BY_KEY[PERMISSION_KEYS.TENANT].UPDATE}' permission in your active role`,
   })
-  @ApiNotFoundResponse({ description: "Tenant not found" })
+  @ApiNotFoundResponse({ description: TENANT_ERROR_MESSAGES.TENANT_NOT_FOUND })
   @CheckPermission({
     key: PERMISSION_KEYS.TENANT,
     scope: PERMISSION_SCOPE_BY_KEY[PERMISSION_KEYS.TENANT].UPDATE,
@@ -102,7 +103,7 @@ export class TenantController {
   @ApiForbiddenResponse({
     description: `Requires '${PERMISSION_KEYS.TENANT}.${PERMISSION_SCOPE_BY_KEY[PERMISSION_KEYS.TENANT].UPDATE}' permission in your active role`,
   })
-  @ApiNotFoundResponse({ description: "Tenant not found" })
+  @ApiNotFoundResponse({ description: TENANT_ERROR_MESSAGES.TENANT_NOT_FOUND })
   @CheckPermission({
     key: PERMISSION_KEYS.TENANT,
     scope: PERMISSION_SCOPE_BY_KEY[PERMISSION_KEYS.TENANT].UPDATE,

@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
 import {
   ApiBearerAuth,
+  ApiConflictResponse,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiOkResponse,
@@ -16,6 +17,7 @@ import { JwtAuthGuard } from "../guards/jwt-auth.guard";
 import { PermissionGuard } from "../guards/permission.guard";
 import { CreateRoleDto } from "./dto/create-role.dto";
 import { Role } from "./entities/role.entity";
+import { ROLE_ERROR_MESSAGES } from "./role.constants";
 import { RoleService } from "./role.service";
 
 @ApiTags("Roles")
@@ -29,6 +31,9 @@ export class RoleController {
   @ApiCreatedResponse({
     description: "Role created successfully",
     type: Role,
+  })
+  @ApiConflictResponse({
+    description: ROLE_ERROR_MESSAGES.ROLE_NAME_ALREADY_EXISTS,
   })
   @ApiForbiddenResponse({
     description: `Requires '${PERMISSION_KEYS.ROLE}.${PERMISSION_SCOPE_BY_KEY[PERMISSION_KEYS.ROLE].CREATE}' permission in your active role`,

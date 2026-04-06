@@ -26,7 +26,7 @@ export class Tenant extends Model<Tenant> {
   declare id: string;
 
   @ApiProperty({ example: "acme" })
-  @Column({ type: DataType.STRING, allowNull: false })
+  @Column({ type: DataType.STRING, allowNull: false, unique: true })
   declare tenantName: string;
 
   @ApiProperty({ example: "premium" })

@@ -12,7 +12,12 @@ export class CreateUserDto {
   @IsNotEmpty()
   email: string;
 
-  @ApiProperty({ example: "strong-password" })
+  @ApiProperty({
+    example: "strong-password",
+    writeOnly: true,
+    description:
+      "User password. Accepted only in request body and never returned in responses.",
+  })
   @IsString()
   @IsNotEmpty()
   password: string;

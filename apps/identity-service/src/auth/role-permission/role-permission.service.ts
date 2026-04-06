@@ -34,7 +34,6 @@ export class RolePermissionService {
 
     return RolePermission.findAll<RolePermission>({
       where: { role_id: roleId },
-      include: [Role],
     });
   }
 

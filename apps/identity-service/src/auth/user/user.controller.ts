@@ -28,6 +28,7 @@ import { PermissionGuard } from "../guards/permission.guard";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserActiveDto } from "./dto/update-user-active.dto";
 import { User } from "./entities/user.entity";
+import { USER_ERROR_MESSAGES } from "./user.constants";
 import { UserService } from "./user.service";
 
 @ApiTags("Users")
@@ -39,7 +40,7 @@ export class UserController {
 
   @ApiOperation({ summary: "Create user" })
   @ApiCreatedResponse({
-    description: "User created successfully",
+    description: "User created successfully (password is never returned)",
     type: User,
   })
   @ApiForbiddenResponse({
@@ -56,7 +57,7 @@ export class UserController {
 
   @ApiOperation({ summary: "List users" })
   @ApiOkResponse({
-    description: "Users retrieved successfully",
+    description: "Users retrieved successfully (password is never returned)",
     type: User,
     isArray: true,
   })
@@ -75,13 +76,14 @@ export class UserController {
 
   @ApiOperation({ summary: "Update user active status" })
   @ApiOkResponse({
-    description: "User active status updated successfully",
+    description:
+      "User active status updated successfully (password is never returned)",
     type: User,
   })
   @ApiForbiddenResponse({
     description: `Requires '${PERMISSION_KEYS.USER}.${PERMISSION_SCOPE_BY_KEY[PERMISSION_KEYS.USER].UPDATE}' permission in your active role`,
   })
-  @ApiNotFoundResponse({ description: "User not found" })
+  @ApiNotFoundResponse({ description: USER_ERROR_MESSAGES.USER_NOT_FOUND })
   @CheckPermission({
     key: PERMISSION_KEYS.USER,
     scope: PERMISSION_SCOPE_BY_KEY[PERMISSION_KEYS.USER].UPDATE,
