@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import * as bcrypt from "bcryptjs";
 import { Role } from "../role/entities/role.entity";
 import { RolePermission } from "../role-permission/entities/role-permission.entity";
@@ -11,15 +11,36 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     const password = await bcrypt.hash(createUserDto.password, 10);
 
-    return User.create<User>({
+    const createdUser = await User.create<User>({
       ...createUserDto,
       password,
       is_active: true,
     } as any);
+
+    return User.findByPk<User>(createdUser.id, {
+      attributes: { exclude: ["password"] },
+      rejectOnEmpty: true,
+    });
   }
 
   async findAll(): Promise<User[]> {
-    return User.findAll<User>();
+    return User.findAll<User>({
+      attributes: { exclude: ["password"] },
+    });
+  }
+
+  async updateIsActive(id: string, isActive: boolean): Promise<User> {
+    const user = await User.findByPk<User>(id);
+
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+
+    await user.update({ is_active: isActive });
+    return User.findByPk<User>(user.id, {
+      attributes: { exclude: ["password"] },
+      rejectOnEmpty: true,
+    });
   }
 
   async findActiveByEmail(email: string): Promise<User | null> {

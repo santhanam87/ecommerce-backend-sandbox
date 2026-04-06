@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 import {
   BelongsTo,
   Column,
@@ -33,7 +33,7 @@ export class User extends Model<User> {
   @Column({ type: DataType.STRING, allowNull: false })
   declare email: string;
 
-  @ApiProperty({ example: "strong-password" })
+  @ApiHideProperty()
   @Column({ type: DataType.STRING, allowNull: false })
   declare password: string;
 
