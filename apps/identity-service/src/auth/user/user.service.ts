@@ -72,17 +72,6 @@ export class UserService {
         email,
         is_active: true,
       },
-      include: [
-        {
-          model: UserRole,
-          include: [
-            {
-              model: Role,
-              include: [RolePermission],
-            },
-          ],
-        },
-      ],
     });
   }
 

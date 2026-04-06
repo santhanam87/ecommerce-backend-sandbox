@@ -14,12 +14,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: AccessTokenPayload) {
+    console.info(payload);
     return {
       id: payload.id,
       email: payload.email,
       tenant_id: payload.tenant_id,
       is_active: payload.is_active,
-      roles: payload.roles,
     };
   }
 }
