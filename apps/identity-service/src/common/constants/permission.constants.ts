@@ -3,12 +3,14 @@ export const PERMISSION_KEYS = {
   USER_ROLE: "user-role",
   TENANT: "tenant",
   ROLE: "role",
+  ROLE_PERMISSION: "role-permission",
 } as const;
 
 export const PERMISSION_SCOPES = {
   CREATE: "create",
   UPDATE: "update",
   READ: "read",
+  DELETE: "delete",
 } as const;
 
 export const PERMISSION_SCOPE_BY_KEY = {
@@ -30,5 +32,11 @@ export const PERMISSION_SCOPE_BY_KEY = {
     CREATE: PERMISSION_SCOPES.CREATE,
     READ: PERMISSION_SCOPES.READ,
     UPDATE: PERMISSION_SCOPES.UPDATE,
+  },
+  [PERMISSION_KEYS.ROLE_PERMISSION]: {
+    CREATE: PERMISSION_SCOPES.CREATE,
+    READ: PERMISSION_SCOPES.READ,
+    UPDATE: PERMISSION_SCOPES.UPDATE,
+    DELETE: PERMISSION_SCOPES.DELETE,
   },
 } as const;
