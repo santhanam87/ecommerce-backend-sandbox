@@ -38,7 +38,8 @@ export class UserRoleController {
 
   @ApiOperation({
     summary: "Assign a role to a user",
-    description: "Create a new user-role mapping. The first role assigned to a user is automatically set as their active role.",
+    description:
+      "Create a new user-role mapping. The first role assigned to a user is automatically set as their active role.",
   })
   @ApiCreatedResponse({
     description: "User role created successfully",
@@ -59,7 +60,8 @@ export class UserRoleController {
 
   @ApiOperation({
     summary: "List all user-role mappings",
-    description: "Retrieve all user-role mappings in the system. Requires read permission.",
+    description:
+      "Retrieve all user-role mappings in the system. Requires read permission.",
   })
   @ApiOkResponse({
     description: "User roles retrieved successfully",
@@ -81,7 +83,8 @@ export class UserRoleController {
 
   @ApiOperation({
     summary: "Switch active role for current user",
-    description: "Set a specific user-role mapping as the active role. Only the user can update their own active role.",
+    description:
+      "Set a specific user-role mapping as the active role. Only the user can update their own active role.",
   })
   @ApiOkResponse({
     description: "Active role updated successfully",
