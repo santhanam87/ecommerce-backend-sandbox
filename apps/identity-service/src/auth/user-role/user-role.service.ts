@@ -9,9 +9,14 @@ import { USER_ROLE_ERROR_MESSAGES } from "./user-role.constants";
 import { UserRole } from "./entities/user-role.entity";
 import { Role } from "../role/entities/role.entity";
 import { User } from "../user/entities/user.entity";
+import { RolePermissionCacheService } from "../role-permission/role-permission-cache.service";
 
 @Injectable()
 export class UserRoleService {
+  constructor(
+    private readonly rolePermissionCacheService: RolePermissionCacheService,
+  ) {}
+
   async create(createUserRoleDto: CreateUserRoleDto): Promise<UserRole> {
     const sequelize = UserRole.sequelize;
 
@@ -39,6 +44,10 @@ export class UserRoleService {
       );
     });
 
+    await this.rolePermissionCacheService.invalidateUser(
+      createUserRoleDto.user_id,
+    );
+
     return UserRole.findByPk<UserRole>(userRole.id, {
       include: [User, Role],
       rejectOnEmpty: true,
@@ -51,7 +60,11 @@ export class UserRoleService {
     });
   }
 
-  async setActiveRole(id: string, actorUserId: string): Promise<UserRole> {
+  async setActiveRole(
+    id: string,
+    actorUserId: string,
+    tenantId: string,
+  ): Promise<UserRole> {
     const sequelize = UserRole.sequelize;
 
     if (!sequelize) {
@@ -65,7 +78,7 @@ export class UserRoleService {
         transaction,
         lock: transaction.LOCK.UPDATE,
       });
-
+      console.info("********", currentUserRole, id);
       if (!currentUserRole) {
         throw new NotFoundException(
           USER_ROLE_ERROR_MESSAGES.USER_ROLE_NOT_FOUND,
@@ -96,6 +109,12 @@ export class UserRoleService {
 
       return currentUserRole;
     });
+
+    await this.rolePermissionCacheService.invalidateUser(actorUserId, tenantId);
+    await this.rolePermissionCacheService.warmUserRolePermissionCache(
+      actorUserId,
+      tenantId,
+    );
 
     return UserRole.findByPk<UserRole>(activeUserRole.id, {
       include: [User, Role],

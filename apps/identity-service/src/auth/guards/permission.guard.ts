@@ -5,9 +5,7 @@ import {
   Injectable,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { Role } from "../role/entities/role.entity";
-import { RolePermission } from "../role-permission/entities/role-permission.entity";
-import { UserRole } from "../user-role/entities/user-role.entity";
+import { RolePermissionCacheService } from "../role-permission/role-permission-cache.service";
 
 export interface PermissionMetadata {
   key: string;
@@ -19,7 +17,10 @@ export const PERMISSION_METADATA_KEY = "permissions";
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    private rolePermissionCacheService: RolePermissionCacheService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const permissionMetadata = this.reflector.get<PermissionMetadata>(
@@ -33,40 +34,17 @@ export class PermissionGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const actorUserId = request.user?.id;
+    const actorTenantId = request.user?.tenant_id;
 
-    if (!actorUserId) {
+    if (!actorUserId || !actorTenantId) {
       throw new ForbiddenException("User not found in request");
     }
 
-    const actorActiveRole = await UserRole.findOne({
-      where: {
-        user_id: actorUserId,
-        is_active_role: true,
-      },
-      include: [
-        {
-          model: Role,
-          include: [RolePermission],
-        },
-      ],
-    });
-
-    const hasPermission = (actorActiveRole?.role?.rolePermissions || []).some(
-      (permission) => {
-        if (permission.permission !== permissionMetadata.key) {
-          return false;
-        }
-
-        const value = permission.value as {
-          allow?: boolean;
-          scope?: string[];
-        };
-        const scopes = value.scope || [];
-
-        return (
-          Boolean(value.allow) && scopes.includes(permissionMetadata.scope)
-        );
-      },
+    const hasPermission = await this.rolePermissionCacheService.hasPermission(
+      actorUserId,
+      actorTenantId,
+      permissionMetadata.key,
+      permissionMetadata.scope,
     );
 
     if (!hasPermission) {

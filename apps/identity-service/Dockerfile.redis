@@ -1,0 +1,4 @@
+FROM redis:7.4-alpine
+
+# Optional runtime tuning for local cache usage.
+CMD ["redis-server", "--appendonly", "yes", "--save", "60", "1000"]

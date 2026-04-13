@@ -4,12 +4,13 @@
 @tenantId = 4b032f7c-6796-4632-9183-76dd601f0ea7
 @userId = a20440aa-90f7-4c87-a1d5-0e8f7b586951
 @roleId = d009b4c2-3e74-473d-b524-545a9de86a47
+@userRoleId = 3bc8ae75-b926-47fb-888e-253d6bf9ca72
 @rolePermissionId = 04da7f13-dda3-40ec-8a37-51b3c294d355
 @userEmail = test@example.com
 @userPassword = SecurePassword123!
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImEyMDQ0MGFhLTkwZjctNGM4Ny1hMWQ1LTBlOGY3YjU4Njk1MSIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsInRlbmFudF9pZCI6IjRiMDMyZjdjLTY3OTYtNDYzMi05MTgzLTc2ZGQ2MDFmMGVhNyIsImlzX2FjdGl2ZSI6dHJ1ZSwicm9sZXMiOlt7ImlkIjoiZDAwOWI0YzItM2U3NC00NzNkLWI1MjQtNTQ1YTlkZTg2YTQ3IiwibmFtZSI6ImFkbWluIiwicGVybWlzc2lvbnMiOlt7ImtleSI6InByb2R1Y3QuY3JlYXRlIiwidmFsdWUiOnsiYWxsb3ciOnRydWUsInNjb3BlcyI6WyJhbGwiXX19XX1dLCJpYXQiOjE3NzU0MzgxMTQsImV4cCI6MTc3NTUyNDUxNH0.1pJRunngYCQzFc_oNFEE66uLlEse-OUxChxe1Z1fhwY
 @refreshToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhMjA0NDBhYS05MGY3LTRjODctYTFkNS0wZThmN2I1ODY5NTEiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTc3NTE4NDI3MiwiZXhwIjoxNzc1Nzg5MDcyfQ.xMKxEQ4R7Q_EPDbTxDV694-eD8dAUx3KCi_QMdS7gbM
-
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFhOTQwMjBiLTA5NzktNGY2OC04M2YzLTFmMWI5MzQzZGJhYSIsImVtYWlsIjoic3VwZXIuYWRtaW5AYWNtZS5jb20iLCJ0ZW5hbnRfaWQiOiJhYjkzMDBmZi1mNmFjLTQwNjYtOWIzOC1iMmQ2MGJhNThjMjQiLCJpc19hY3RpdmUiOnRydWUsImlhdCI6MTc3NjA1MTQ5OCwiZXhwIjoxNzc2MTM3ODk4fQ.IM31nIQJ4CIIZSR1n7Anx94jIP8QgnqTkC7oVtHxc3s
+@subRoleId = 8d54331a-eb80-4fee-84e9-d3f9f14bed35
 ###
 # ---- AUTH ----
 
@@ -132,6 +133,10 @@ Content-Type: {{contentType}}
 GET {{baseUrl}}/identity/auth/user-roles
 Authorization: Bearer {{accessToken}}
 
+### Switch active role for current user
+PATCH {{baseUrl}}/identity/auth/user-roles/{{subRoleId}}/active-role
+Authorization: Bearer {{accessToken}}
+
 ###
 # ---- NOTES ----
 
@@ -139,3 +144,4 @@ Authorization: Bearer {{accessToken}}
 ### 2. Run login and copy access_token and refresh_token into the variables above.
 ### 3. Use the returned access token for all protected routes.
 ### 4. Use the created role id for role-permission and user-role requests.
+### 5. Set userRoleId to an existing user-role mapping id owned by the authenticated user before switching active role.
