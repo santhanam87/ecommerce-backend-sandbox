@@ -14,9 +14,7 @@ export type AccessTokenRole = Pick<Role, "id" | "name"> & {
 export type AccessTokenPayload = Pick<
   User,
   "id" | "email" | "tenant_id" | "is_active"
-> & {
-  roles: AccessTokenRole[];
-};
+>;
 
 export type RefreshTokenPayload = {
   sub: User["id"];

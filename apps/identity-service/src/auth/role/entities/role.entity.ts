@@ -14,7 +14,11 @@ import { RolePermission } from "../../role-permission/entities/role-permission.e
 import { Tenant } from "../../tenant/entities/tenant.entity";
 import { UserRole } from "../../user-role/entities/user-role.entity";
 
-@Table({ tableName: "roles", timestamps: true })
+@Table({
+  tableName: "roles",
+  timestamps: true,
+  indexes: [{ unique: true, fields: ["name", "tenant_id"] }],
+})
 export class Role extends Model<Role> {
   @ApiProperty({ example: "f90c5d7b-c1d2-4568-a4dd-7be4474847da" })
   @PrimaryKey

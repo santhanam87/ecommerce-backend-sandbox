@@ -28,7 +28,7 @@ export class RolePermission extends Model<RolePermission> {
   @BelongsTo(() => Role)
   declare role: Role;
 
-  @ApiProperty({ example: "product.create" })
+  @ApiProperty({ example: "product" })
   @Column({ type: DataType.STRING, allowNull: false })
   declare permission: string;
 

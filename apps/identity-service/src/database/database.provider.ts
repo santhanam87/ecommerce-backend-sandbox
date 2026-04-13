@@ -21,7 +21,20 @@ export const databaseProviders = [
         database: configService.get<string>("DB_NAME"),
         models: [Tenant, User, Role, RolePermission, UserRole],
       });
+
       await sequelize.sync();
+      await sequelize.query(`
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_tenants_tenant_name_unique
+        ON "tenants" ("tenantName");
+      `);
+      await sequelize.query(`
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email_unique
+        ON "users" ("email");
+      `);
+      await sequelize.query(`
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_roles_name_tenant_id_unique
+        ON "roles" ("name", "tenant_id");
+      `);
       console.info("Identity service database connected successfully");
       return sequelize;
     },

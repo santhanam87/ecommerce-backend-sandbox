@@ -25,6 +25,18 @@ export class RolePermissionService {
     });
   }
 
+  async findAllByRoleId(roleId: string): Promise<RolePermission[]> {
+    const role = await Role.findByPk<Role>(roleId);
+
+    if (!role) {
+      throw new NotFoundException("Role not found");
+    }
+
+    return RolePermission.findAll<RolePermission>({
+      where: { role_id: roleId },
+    });
+  }
+
   async updateValue(
     id: string,
     updateRolePermissionValueDto: UpdateRolePermissionValueDto,
@@ -36,12 +48,26 @@ export class RolePermissionService {
     }
 
     await rolePermission.update({
-      value: updateRolePermissionValueDto.value,
+      value: {
+        allow: true,
+        scope: updateRolePermissionValueDto.scope,
+      },
     });
 
     return RolePermission.findByPk<RolePermission>(id, {
       include: [Role],
       rejectOnEmpty: true,
     });
+  }
+
+  async remove(id: string): Promise<{ message: string }> {
+    const rolePermission = await RolePermission.findByPk<RolePermission>(id);
+
+    if (!rolePermission) {
+      throw new NotFoundException("Role permission not found");
+    }
+
+    await rolePermission.destroy();
+    return { message: "Role permission deleted successfully" };
   }
 }

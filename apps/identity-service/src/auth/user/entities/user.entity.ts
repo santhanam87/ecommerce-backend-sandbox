@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 import {
   BelongsTo,
   Column,
@@ -13,7 +13,18 @@ import {
 import { Tenant } from "../../tenant/entities/tenant.entity";
 import { UserRole } from "../../user-role/entities/user-role.entity";
 
-@Table({ tableName: "users", timestamps: true })
+@Table({
+  tableName: "users",
+  timestamps: true,
+  defaultScope: {
+    attributes: { exclude: ["password"] },
+  },
+  scopes: {
+    withPassword: {
+      attributes: { include: ["password"] },
+    },
+  },
+})
 export class User extends Model<User> {
   @ApiProperty({ example: "8d79c6fe-f5b6-4a5d-b7d0-f7be4c74f1e9" })
   @PrimaryKey
@@ -30,10 +41,10 @@ export class User extends Model<User> {
   declare tenant: Tenant;
 
   @ApiProperty({ example: "user@example.com" })
-  @Column({ type: DataType.STRING, allowNull: false })
+  @Column({ type: DataType.STRING, allowNull: false, unique: true })
   declare email: string;
 
-  @ApiProperty({ example: "strong-password" })
+  @ApiHideProperty()
   @Column({ type: DataType.STRING, allowNull: false })
   declare password: string;
 

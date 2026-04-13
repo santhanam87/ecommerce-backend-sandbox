@@ -79,24 +79,11 @@ export class AuthService {
   }
 
   private buildAccessPayload(user: User): AccessTokenPayload {
-    const roles = (user.userRoles || [])
-      .map((userRole) => userRole.role)
-      .filter((role): role is NonNullable<typeof role> => Boolean(role))
-      .map((role) => ({
-        id: role.id,
-        name: role.name,
-        permissions: (role.rolePermissions || []).map((rolePermission) => ({
-          key: rolePermission.permission,
-          value: rolePermission.value,
-        })),
-      }));
-
     return {
       id: user.id,
       email: user.email,
       tenant_id: user.tenant_id,
       is_active: user.is_active,
-      roles,
     };
   }
 

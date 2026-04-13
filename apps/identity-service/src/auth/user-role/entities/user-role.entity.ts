@@ -38,6 +38,11 @@ export class UserRole extends Model<UserRole> {
   @BelongsTo(() => Role)
   declare role: Role;
 
+  @ApiProperty({ example: true })
+  @Default(false)
+  @Column({ type: DataType.BOOLEAN, allowNull: false })
+  declare is_active_role: boolean;
+
   @ApiProperty({ example: "2026-03-28T09:30:00.000Z" })
   declare createdAt: Date;
 
