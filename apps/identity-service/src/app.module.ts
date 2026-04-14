@@ -7,6 +7,7 @@ import { AuthModule } from "./auth/auth.module";
 import { APP_FILTER, RouterModule } from "@nestjs/core";
 import { HttpExceptionFilter } from "./common/filter/http-exception.filter";
 import { DatabaseModule } from "./database/database.module";
+import { RedisModule } from "./redis/redis.module";
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { DatabaseModule } from "./database/database.module";
       },
     ]),
     DatabaseModule,
+    RedisModule,
     AuthModule,
   ],
   controllers: [AppController],

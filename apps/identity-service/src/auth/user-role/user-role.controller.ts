@@ -97,7 +97,11 @@ export class UserRoleController {
     description: USER_ROLE_ERROR_MESSAGES.USER_ROLE_NOT_FOUND,
   })
   @Patch(":id/active-role")
-  setActiveRole(@Param("id") id: string, @GetUser("id") actorUserId: string) {
-    return this.userRoleService.setActiveRole(id, actorUserId);
+  setActiveRole(
+    @Param("id") id: string,
+    @GetUser("id") actorUserId: string,
+    @GetUser("tenant_id") tenantId: string,
+  ) {
+    return this.userRoleService.setActiveRole(id, actorUserId, tenantId);
   }
 }

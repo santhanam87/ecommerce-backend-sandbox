@@ -16,6 +16,7 @@ import { RolePermissionService } from "./role-permission/role-permission.service
 import { RolePermissionController } from "./role-permission/role-permission.controller";
 import { UserRoleService } from "./user-role/user-role.service";
 import { UserRoleController } from "./user-role/user-role.controller";
+import { RolePermissionCacheService } from "./role-permission/role-permission-cache.service";
 
 @Module({
   imports: [
@@ -37,19 +38,13 @@ import { UserRoleController } from "./user-role/user-role.controller";
     UserRoleController,
   ],
   providers: [
-    {
-      provide: "JwtStrategy",
-      useFactory: (config: ConfigService) => {
-        const secret = config.get("JWT_SECRET") as string;
-        return new JwtStrategy(secret);
-      },
-      inject: [ConfigService],
-    },
+    JwtStrategy,
     AuthService,
     TenantService,
     UserService,
     RoleService,
     RolePermissionService,
+    RolePermissionCacheService,
     UserRoleService,
     JwtAuthGuard,
     PermissionGuard,

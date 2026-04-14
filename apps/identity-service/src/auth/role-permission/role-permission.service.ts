@@ -3,14 +3,23 @@ import { CreateRolePermissionDto } from "./dto/create-role-permission.dto";
 import { UpdateRolePermissionValueDto } from "./dto/update-role-permission-value.dto";
 import { RolePermission } from "./entities/role-permission.entity";
 import { Role } from "../role/entities/role.entity";
+import { RolePermissionCacheService } from "./role-permission-cache.service";
 
 @Injectable()
 export class RolePermissionService {
+  constructor(
+    private readonly rolePermissionCacheService: RolePermissionCacheService,
+  ) {}
+
   async create(
     createRolePermissionDto: CreateRolePermissionDto,
   ): Promise<RolePermission> {
     const rolePermission = await RolePermission.create<RolePermission>(
       createRolePermissionDto as any,
+    );
+
+    await this.rolePermissionCacheService.invalidateByRoleId(
+      rolePermission.role_id,
     );
 
     return RolePermission.findByPk<RolePermission>(rolePermission.id, {
@@ -54,6 +63,10 @@ export class RolePermissionService {
       },
     });
 
+    await this.rolePermissionCacheService.invalidateByRoleId(
+      rolePermission.role_id,
+    );
+
     return RolePermission.findByPk<RolePermission>(id, {
       include: [Role],
       rejectOnEmpty: true,
@@ -67,7 +80,11 @@ export class RolePermissionService {
       throw new NotFoundException("Role permission not found");
     }
 
+    const roleId = rolePermission.role_id;
     await rolePermission.destroy();
+
+    await this.rolePermissionCacheService.invalidateByRoleId(roleId);
+
     return { message: "Role permission deleted successfully" };
   }
 }
