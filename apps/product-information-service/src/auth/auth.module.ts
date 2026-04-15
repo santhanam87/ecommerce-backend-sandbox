@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { JwtAuthGuard } from './jwt.auth-guard';
+import { PermissionGuard } from './permission.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PermissionService } from './permission.service';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     },
     JwtAuthGuard,
+    PermissionGuard,
+    PermissionService,
   ],
 })
 export class AuthModule {}

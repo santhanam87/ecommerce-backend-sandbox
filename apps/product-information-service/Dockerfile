@@ -37,6 +37,8 @@ WORKDIR /app
 COPY --from=builder /app/deploy ./
 
 ENV NODE_ENV=production
+ENV PORT=3003
+ENV IDENTITY_SERVICE_URL=http://host.docker.internal:3004
 
 EXPOSE 3003
 
