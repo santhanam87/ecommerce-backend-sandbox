@@ -13,7 +13,6 @@ services:
       NODE_ENV: production
       PORT: ${PORT:-3004}
 
-      DATABASE_URL: postgresql://${DB_USERNAME:-postgres}:${DB_PASSWORD:-postgres}@host.docker.internal:${DB_PORT:-5432}/${DB_NAME:-identity-service}
       DB_HOST: host.docker.internal
       DB_PORT: ${DB_PORT:-5432}
       DB_USERNAME: ${DB_USERNAME:-postgres}
@@ -21,7 +20,7 @@ services:
       DB_NAME: ${DB_NAME:-identity-service}
 
       JWT_SECRET: ${JWT_SECRET:-some-super-secret-key}
-      REDIS_HOST: redis
+      REDIS_HOST: host.docker.internal
       REDIS_PORT: ${REDIS_PORT:-6379}
       REDIS_PASSWORD: ${REDIS_PASSWORD:-}
       ROLE_PERMISSION_CACHE_TTL_SECONDS: ${ROLE_PERMISSION_CACHE_TTL_SECONDS:-300}
@@ -29,28 +28,4 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-    depends_on:
-      redis:
-        condition: service_healthy
-
     restart: unless-stopped
-
-  redis:
-    build:
-      context: .
-      dockerfile: Dockerfile.redis
-    image: identity-service-redis:latest
-    container_name: identity-service-redis
-    ports:
-      - "${REDIS_PORT:-6379}:6379"
-    volumes:
-      - redis-data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-    restart: unless-stopped
-
-volumes:
-  redis-data:
