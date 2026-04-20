@@ -1,7 +1,306 @@
 @baseUrl = http://localhost:3003
 @contentType = application/json
+@token = your-jwt-token-here
 
 @productId = 11111111-1111-4111-8111-111111111111
+@productVariantId = 22222222-2222-4222-8222-222222222222
+@productAttributeKeyId = 33333333-3333-4333-8333-333333333333
+@productAttributeValueId = 44444444-4444-4444-8444-444444444444
+@productAttributeMappingId = 55555555-5555-4555-8555-555555555555
+@productPropertyKeyId = 66666666-6666-4666-8666-666666666666
+@productPropertyValueId = 77777777-7777-4777-8777-777777777777
+@productPropertyMappingId = 88888888-8888-4888-8888-888888888888
+@categoryId = 99999999-9999-4999-8999-999999999999
+@categoryRuleGroupId = aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa
+@categoryRuleConditionId = bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb
+
+###
+# Note: Update @token with your actual JWT token from the identity service
+# Example token value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+###
+# PRODUCT CRUD
+# -------
+
+### Create product
+POST {{baseUrl}}/products
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Running Shoe",
+  "description": "Lightweight running shoe with breathable upper"
+}
+
+### Get all products
+GET {{baseUrl}}/products
+Authorization: Bearer {{token}}
+
+### Get product by id
+GET {{baseUrl}}/products/{{productId}}
+Authorization: Bearer {{token}}
+
+### Update product
+PATCH {{baseUrl}}/products/{{productId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Running Shoe Pro",
+  "description": "Updated description"
+}
+
+### Delete product
+DELETE {{baseUrl}}/products/{{productId}}
+Authorization: Bearer {{token}}
+
+###
+# PRODUCT VARIANT CRUD
+# --------------------
+
+### Create product variant
+POST {{baseUrl}}/products/variants
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "product_id": "{{productId}}",
+  "sku": "RUN-SHOE-42-BLK",
+  "price": 129.99
+}
+
+### Get all product variants
+GET {{baseUrl}}/products/variants
+Authorization: Bearer {{token}}
+
+### Get product variant by id
+GET {{baseUrl}}/products/variants/{{productVariantId}}
+Authorization: Bearer {{token}}
+
+### Update product variant
+PATCH {{baseUrl}}/products/variants/{{productVariantId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "sku": "RUN-SHOE-42-BLK-V2",
+  "price": 139.99
+}
+
+### Delete product variant
+DELETE {{baseUrl}}/products/variants/{{productVariantId}}
+Authorization: Bearer {{token}}
+
+###
+# PRODUCT ATTRIBUTE KEY CRUD
+# ---------------------------
+
+### Create product attribute key
+POST {{baseUrl}}/products/attribute-keys
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Size",
+  "is_variant": true
+}
+
+### Get all product attribute keys
+GET {{baseUrl}}/products/attribute-keys
+Authorization: Bearer {{token}}
+
+### Get product attribute key by id
+GET {{baseUrl}}/products/attribute-keys/{{productAttributeKeyId}}
+Authorization: Bearer {{token}}
+
+### Update product attribute key
+PATCH {{baseUrl}}/products/attribute-keys/{{productAttributeKeyId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Primary Size"
+}
+
+### Delete product attribute key
+DELETE {{baseUrl}}/products/attribute-keys/{{productAttributeKeyId}}
+Authorization: Bearer {{token}}
+
+###
+# PRODUCT ATTRIBUTE VALUE CRUD
+# --------------------------
+
+### Create product attribute value
+POST {{baseUrl}}/products/attribute-values
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "attribute_id": "{{productAttributeKeyId}}",
+  "value": "42"
+}
+
+### Get all product attribute values
+GET {{baseUrl}}/products/attribute-values
+Authorization: Bearer {{token}}
+
+### Get product attribute value by id
+GET {{baseUrl}}/products/attribute-values/{{productAttributeValueId}}
+Authorization: Bearer {{token}}
+
+### Update product attribute value
+PATCH {{baseUrl}}/products/attribute-values/{{productAttributeValueId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "value": "43"
+}
+
+### Delete product attribute value
+DELETE {{baseUrl}}/products/attribute-values/{{productAttributeValueId}}
+Authorization: Bearer {{token}}
+
+###
+# PRODUCT ATTRIBUTE KEY VALUE MAPPING CRUD
+# -----------------------------------------
+
+### Create product attribute key value mapping
+POST {{baseUrl}}/products/attribute-key-value-mappings
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "variant_id": "{{productVariantId}}",
+  "attribute_key_id": "{{productAttributeKeyId}}",
+  "attribute_value_id": "{{productAttributeValueId}}"
+}
+
+### Get all product attribute key value mappings
+GET {{baseUrl}}/products/attribute-key-value-mappings
+Authorization: Bearer {{token}}
+
+### Get product attribute key value mapping by id
+GET {{baseUrl}}/products/attribute-key-value-mappings/{{productAttributeMappingId}}
+Authorization: Bearer {{token}}
+
+### Update product attribute key value mapping
+PATCH {{baseUrl}}/products/attribute-key-value-mappings/{{productAttributeMappingId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "attribute_value_id": "{{productAttributeValueId}}"
+}
+
+### Delete product attribute key value mapping
+DELETE {{baseUrl}}/products/attribute-key-value-mappings/{{productAttributeMappingId}}
+Authorization: Bearer {{token}}
+
+###
+# PRODUCT PROPERTY KEY CRUD
+# -------------------------
+
+### Create product property key
+POST {{baseUrl}}/products/property-keys
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Material"
+}
+
+### Get all product property keys
+GET {{baseUrl}}/products/property-keys
+Authorization: Bearer {{token}}
+
+### Get product property key by id
+GET {{baseUrl}}/products/property-keys/{{productPropertyKeyId}}
+Authorization: Bearer {{token}}
+
+### Update product property key
+PATCH {{baseUrl}}/products/property-keys/{{productPropertyKeyId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Upper Material"
+}
+
+### Delete product property key
+DELETE {{baseUrl}}/products/property-keys/{{productPropertyKeyId}}
+Authorization: Bearer {{token}}
+
+###
+# PRODUCT PROPERTY VALUE CRUD
+# ---------------------------
+
+### Create product property value
+POST {{baseUrl}}/products/property-values
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "property_id": "{{productPropertyKeyId}}",
+  "value": "Mesh"
+}
+
+### Get all product property values
+GET {{baseUrl}}/products/property-values
+Authorization: Bearer {{token}}
+
+### Get product property value by id
+GET {{baseUrl}}/products/property-values/{{productPropertyValueId}}
+Authorization: Bearer {{token}}
+
+### Update product property value
+PATCH {{baseUrl}}/products/property-values/{{productPropertyValueId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "value": "Leather"
+}
+
+### Delete product property value
+DELETE {{baseUrl}}/products/property-values/{{productPropertyValueId}}
+Authorization: Bearer {{token}}
+
+###
+# PRODUCT PROPERTY KEY VALUE MAPPING CRUD
+# ----------------------------------------
+
+### Create product property key value mapping
+POST {{baseUrl}}/products/property-key-value-mappings
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "product_id": "{{productId}}",
+  "property_key_id": "{{productPropertyKeyId}}",
+  "property_value_id": "{{productPropertyValueId}}"
+}
+
+### Get all product property key value mappings
+GET {{baseUrl}}/products/property-key-value-mappings
+Authorization: Bearer {{token}}
+
+### Get product property key value mapping by id
+GET {{baseUrl}}/products/property-key-value-mappings/{{productPropertyMappingId}}
+Authorization: Bearer {{token}}
+
+### Update product property key value mapping
+PATCH {{baseUrl}}/products/property-key-value-mappings/{{productPropertyMappingId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "property_value_id": "{{productPropertyValueId}}"
+}
+
+### Delete product property key value mapping
+DELETE {{baseUrl}}/products/property-key-value-mappings/{{productPropertyMappingId}}
+Authorization: Bearer {{token}}
 @productVariantId = 22222222-2222-4222-8222-222222222222
 @productAttributeKeyId = 33333333-3333-4333-8333-333333333333
 @productAttributeValueId = 44444444-4444-4444-8444-444444444444
@@ -21,6 +320,7 @@
 ### Create product
 POST {{baseUrl}}/products
 Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
   "name": "Running Shoe",
@@ -28,16 +328,17 @@ Content-Type: {{contentType}}
 }
 
 ### Get all products
-GET {{baseUrl}}/products
+Authorization: Bearer {{token}}
 
 ### Get product by id
 # Replace with a real UUID from create/list response
 @productId = cb3ab1a5-2cd3-4b81-9aaa-2d40d3c8e0f3
 GET {{baseUrl}}/products/{{productId}}
+Authorization: Bearer {{token-2d40d3c8e0f3
+GET {{baseUrl}}/products/{{productId}}
 
 ### Update product
-PATCH {{baseUrl}}/products/{{productId}}
-Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
   "name": "Running Shoe Pro",
@@ -46,15 +347,15 @@ Content-Type: {{contentType}}
 
 ### Delete product
 DELETE {{baseUrl}}/products/{{productId}}
+Authorization: Bearer {{token
+### Delete product
+DELETE {{baseUrl}}/products/{{productId}}
 
 ###
 # -----------------------------
 # PRODUCT VARIANT CRUD
 # -----------------------------
-
-### Create product variant
-POST {{baseUrl}}/products/variants
-Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
   "product_id": "{{productId}}",
@@ -64,13 +365,16 @@ Content-Type: {{contentType}}
 
 ### Get all product variants
 GET {{baseUrl}}/products/variants
+Authorization: Bearer {{token}}
 
 ### Get product variant by id
 GET {{baseUrl}}/products/variants/{{productVariantId}}
+Authorization: Bearer {{token}}
 
 ### Update product variant
 PATCH {{baseUrl}}/products/variants/{{productVariantId}}
 Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
   "sku": "RUN-SHOE-42-BLK-V2",
@@ -79,15 +383,14 @@ Content-Type: {{contentType}}
 
 ### Delete product variant
 DELETE {{baseUrl}}/products/variants/{{productVariantId}}
+Authorization: Bearer {{token
+}
+
+### Delete product variant
+DELETE {{baseUrl}}/products/variants/{{productVariantId}}
 
 ###
-# -----------------------------
-# PRODUCT ATTRIBUTE KEY CRUD
-# -----------------------------
-
-### Create product attribute key
-POST {{baseUrl}}/products/attribute-keys
-Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
   "name": "Size",
@@ -96,13 +399,16 @@ Content-Type: {{contentType}}
 
 ### Get all product attribute keys
 GET {{baseUrl}}/products/attribute-keys
+Authorization: Bearer {{token}}
 
 ### Get product attribute key by id
 GET {{baseUrl}}/products/attribute-keys/{{productAttributeKeyId}}
+Authorization: Bearer {{token}}
 
 ### Update product attribute key
 PATCH {{baseUrl}}/products/attribute-keys/{{productAttributeKeyId}}
 Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
   "name": "Primary Size"
@@ -110,15 +416,12 @@ Content-Type: {{contentType}}
 
 ### Delete product attribute key
 DELETE {{baseUrl}}/products/attribute-keys/{{productAttributeKeyId}}
+Authorization: Bearer {{token
 
-###
-# -----------------------------
-# PRODUCT ATTRIBUTE VALUE CRUD
-# -----------------------------
-
-### Create product attribute value
-POST {{baseUrl}}/products/attribute-values
-Content-Type: {{contentType}}
+{
+  "name": "Primary Size"
+}
+Authorization: Bearer {{token}}
 
 {
   "attribute_id": "{{productAttributeKeyId}}",
@@ -127,8 +430,24 @@ Content-Type: {{contentType}}
 
 ### Get all product attribute values
 GET {{baseUrl}}/products/attribute-values
+Authorization: Bearer {{token}}
 
 ### Get product attribute value by id
+GET {{baseUrl}}/products/attribute-values/{{productAttributeValueId}}
+Authorization: Bearer {{token}}
+
+### Update product attribute value
+PATCH {{baseUrl}}/products/attribute-values/{{productAttributeValueId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "value": "43"
+}
+
+### Delete product attribute value
+DELETE {{baseUrl}}/products/attribute-values/{{productAttributeValueId}}
+Authorization: Bearer {{token
 GET {{baseUrl}}/products/attribute-values/{{productAttributeValueId}}
 
 ### Update product attribute value

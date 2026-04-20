@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { JwtAuthGuard } from './jwt.auth-guard';
@@ -6,6 +6,7 @@ import { PermissionGuard } from './permission.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PermissionService } from './permission.service';
 
+@Global()
 @Module({
   imports: [
     JwtModule.registerAsync({
@@ -30,5 +31,6 @@ import { PermissionService } from './permission.service';
     PermissionGuard,
     PermissionService,
   ],
+  exports: [JwtAuthGuard, PermissionGuard, PermissionService, JwtModule],
 })
 export class AuthModule {}

@@ -33,7 +33,7 @@ export class ProductPropertyKeyValueMapping extends Model {
     allowNull: false,
     field: 'variant_id',
     references: {
-      model: 'variants',
+      model: 'product_variants',
       key: 'id',
     },
     onDelete: 'CASCADE',

@@ -9,12 +9,19 @@ async function bootstrap() {
     .setTitle('Product Information Service API')
     .setDescription('API documentation for product-information-service')
     .setVersion('1.0')
+    .addServer(
+      process.env.IDENTITY_SERVICE_URL || 'http://localhost:3001',
+      'Identity Service',
+    )
     .addBearerAuth(
       {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT',
-        description: 'Provide a valid JWT access token',
+        description:
+          'Enter a valid JWT access token obtained from the identity service',
+        name: 'Authorization',
+        in: 'header',
       },
       'bearer',
     )
